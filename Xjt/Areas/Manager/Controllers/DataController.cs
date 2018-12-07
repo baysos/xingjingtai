@@ -27,6 +27,16 @@ namespace Xjt.Areas.Manager.Controllers
             return View();
         }
 
+        private JsonResult Result(object obj)
+        {
+            return Result(ResultType.Success, obj);
+        }
+
+        private JsonResult ExceptionResult(object obj)
+        {
+            return Result(ResultType.Exception, obj);
+        }
+
         private JsonResult Result(ResultType type, object obj)
         {
             var jsonResult = new JsonResult();
