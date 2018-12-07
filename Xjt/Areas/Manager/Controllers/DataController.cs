@@ -39,9 +39,11 @@ namespace Xjt.Areas.Manager.Controllers
 
         private JsonResult Result(ResultType type, object obj)
         {
-            var jsonResult = new JsonResult();
-            jsonResult.ContentType = "application/json";
-            jsonResult.Data = new { code = (int)type, data = JsonConvert.SerializeObject(obj) };
+            var jsonResult = new JsonResult
+            {
+                ContentType = "application/json",
+                Data = new {code = (int) type, data = JsonConvert.SerializeObject(obj)}
+            };
 
             return jsonResult;
         }
