@@ -27,4 +27,11 @@ namespace Xjt.Data
 
         public string Img { get; set; }
     }
+
+    public class Banner
+    {
+        public string Img { get; set; }
+
+        public string Title { get; set; }
+    }
 }

@@ -138,7 +138,10 @@
     <Compile Include="Areas\Manager\Controllers\DataController.cs" />
     <Compile Include="Areas\Manager\ManagerAreaRegistration.cs" />
     <Compile Include="Areas\Manager\Models\ResultType.cs" />
+    <Compile Include="Common\CommonHelper.cs" />
     <Compile Include="Common\ConstValue.cs" />
+    <Compile Include="Common\CustomActionFilterAttribute.cs" />
+    <Compile Include="Common\IdentityVerification.cs" />
     <Compile Include="Common\SecurityHelper.cs" />
     <Compile Include="Common\TryConvertUtil.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -147,6 +150,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ApiParamModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -168,11 +172,13 @@
     <Content Include="Areas\Manager\Views\Data\Index.cshtml" />
     <Content Include="Areas\Manager\Views\Data\Login.cshtml" />
     <Content Include="Data\Product.config" />
+    <Content Include="Data\Banner.config" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
+    <Content Include="Scripts\jquery.form.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\wEdit\wangEditor.css" />
     <Content Include="Scripts\wEdit\wangEditor.js" />
@@ -238,8 +244,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Image\" />
-    <Folder Include="Models\" />
+    <Folder Include="Image\UpLoad\" />
     <Folder Include="Service\" />
   </ItemGroup>
   <ItemGroup>

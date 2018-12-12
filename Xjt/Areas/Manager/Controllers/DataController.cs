@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using Xjt.Areas.Manager.Models;
 using Xjt.Common;
+using Xjt.Data;
 
 namespace Xjt.Areas.Manager.Controllers
 {
@@ -20,32 +22,30 @@ namespace Xjt.Areas.Manager.Controllers
 
         public ActionResult Login(string name, string pass)
         {
-            if (Request.IsAjaxRequest())
-            {
-                Response.Redirect("/Manager/data/index");
-            }
             return View();
         }
 
-        private JsonResult Result(object obj)
+        [HttpPost]
+        public ActionResult LoginCheck(string name, string pass)
         {
-            return Result(ResultType.Success, obj);
-        }
-
-        private JsonResult ExceptionResult(object obj)
-        {
-            return Result(ResultType.Exception, obj);
-        }
-
-        private JsonResult Result(ResultType type, object obj)
-        {
-            var jsonResult = new JsonResult
+            var userList = CommonHelper.GetJsonModel<List<User>>("User");
+            if (userList != null && userList.Count > 0)
             {
-                ContentType = "application/json",
-                Data = new {code = (int) type, data = JsonConvert.SerializeObject(obj)}
-            };
+                var user = userList.Find(a => a.Name == name);
+                if (user == null)
+                {
+                    return CommonHelper.ExceptionResult("用户名不存在");
+                }
 
-            return jsonResult;
+                var p = SecurityHelper.CreateMd5Str(pass + ConstValue.PassSalt);
+                if (user.Pass != p)
+                {
+                    return CommonHelper.ExceptionResult("用户名或密码错误");
+                }
+
+            }
+
+            return CommonHelper.ExceptionResult("用户名不存在");
         }
     }
 }

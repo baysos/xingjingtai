@@ -58,7 +58,7 @@
                     <h3 class="text-center">
                         兴晶泰官网
                     </h3><br>
-                    <form id="login">
+                    <form id="login-form">
                         <div class="form-group">
                             <label for="username">用户名</label>
                             <input type="text" class="form-control" id="username" placeholder="输入用户名" value="@ViewBag.pass"> 
@@ -76,8 +76,32 @@
 </section>
 
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/jquery.form.js"></script>
 <script type="text/javascript">
-    $(function() {
+    $(function () {
+        $('#login-form').on('submit', function () {
+            var name = $('#username').val();
+            var pass = $('#example-password-input').val();
+            if (!name || !pass) {
+                alert("请输入用户名或密码");
+                return false;
+            }
+            $.ajax({
+                type: 'post',
+                url: '/manager/data/LoginCheck',
+                data: {
+                    'name': name,
+                    'pass': pass
+                },
+                dataType: "json",
+                success:function(data) {
+                    if (data.code === 500) {
+                        alert(data.data);
+                    }
+                }
+            });
+            return false;
+        });
         
     });
 </script>
