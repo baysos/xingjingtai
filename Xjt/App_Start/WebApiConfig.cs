@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using Xjt.Common;
 
 namespace Xjt
 {
@@ -19,6 +20,8 @@ namespace Xjt
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            config.Filters.Add(new CustomActionFilterAttribute());
         }
     }
 }

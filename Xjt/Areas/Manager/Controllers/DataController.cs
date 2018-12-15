@@ -43,6 +43,10 @@ namespace Xjt.Areas.Manager.Controllers
                     return CommonHelper.ExceptionResult("用户名或密码错误");
                 }
 
+                var sign = Guid.NewGuid().ToStringEx();
+                CommonHelper.SignDic[name] = sign;
+
+                return CommonHelper.Result(sign);
             }
 
             return CommonHelper.ExceptionResult("用户名不存在");

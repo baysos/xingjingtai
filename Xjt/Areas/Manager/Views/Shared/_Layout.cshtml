@@ -2,39 +2,48 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <title>@ViewBag.Title - 兴晶泰</title>
+    <link href="~/Style/roboto_condensed.css" rel="stylesheet" />
+    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Style/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Style/font-icon-style.css" rel="stylesheet" />
+    <link href="~/Style/style.default.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                </ul>
-            </div>
+    <header class="header">
+        <nav class="navbar navbar-expand-lg ">
+
+        </nav>
+    </header>
+    <div class="page-content d-flex align-items-stretch">
+        <nav class="side-navbar">
+            <ul class="list-unstyled">
+                <li> <a href="tables.html"> <i class="icon-grid"></i>Banner设置 </a></li>
+                <li> <a href="tables.html"> <i class="icon-grid"></i>主推产品设置 </a></li>
+            </ul>
+        </nav>
+        <div class="content-inner chart-cont">
+            @RenderBody()
         </div>
     </div>
 
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/popper/popper.min.js"></script>
+    <script src="~/Scripts/tether.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.cookie.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/chart.min.js"></script>
+    <script src="~/Scripts/front.js"></script>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+    <script type="text/javascript">
+        $.ready(function () {
+            alert(1);
+        });
+    </script>
 </body>
 </html>
