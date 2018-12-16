@@ -16,34 +16,30 @@
 <body>
     <header class="header">
         <nav class="navbar navbar-expand-lg ">
-
+            <a>退出</a>
+            <a>修改密码</a>
         </nav>
     </header>
     <div class="page-content d-flex align-items-stretch">
         <nav class="side-navbar">
             <ul class="list-unstyled">
-                <li> <a href="tables.html"> <i class="icon-grid"></i>Banner设置 </a></li>
-                <li> <a href="tables.html"> <i class="icon-grid"></i>主推产品设置 </a></li>
+                <li class="@(ViewBag.Tag==1?"active":string.Empty)"> <a href="/manager/data/index?s=@(Request.Params["s"])&name=@(Request.Params["n"])"> <i class="icon-grid"></i>Banner设置</a></li>
+                <li class="@(ViewBag.Tag==2?"active":string.Empty)"> <a href="/manager/data/product?s=@(Request.Params["s"])&name=@(Request.Params["n"])"> <i class="icon-grid"></i>主推产品设置</a></li>
             </ul>
         </nav>
+        <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+        <script src="~/Scripts/popper/popper.min.js"></script>
+        <script src="~/Scripts/tether.min.js"></script>
+        <script src="~/Scripts/bootstrap.min.js"></script>
+        <script src="~/Scripts/jquery.cookie.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/chart.min.js"></script>
+        <script src="~/Scripts/front.js"></script>
         <div class="content-inner chart-cont">
             @RenderBody()
         </div>
     </div>
 
-    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
-    <script src="~/Scripts/popper/popper.min.js"></script>
-    <script src="~/Scripts/tether.min.js"></script>
-    <script src="~/Scripts/bootstrap.min.js"></script>
-    <script src="~/Scripts/jquery.cookie.js"></script>
-    <script src="~/Scripts/jquery.validate.min.js"></script>
-    <script src="~/Scripts/chart.min.js"></script>
-    <script src="~/Scripts/front.js"></script>
 
-    <script type="text/javascript">
-        $.ready(function () {
-            alert(1);
-        });
-    </script>
 </body>
 </html>

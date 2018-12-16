@@ -175,6 +175,7 @@
     <Content Include="Areas\Manager\Views\Data\Login.cshtml" />
     <Content Include="Data\Product.config" />
     <Content Include="Data\Banner.config" />
+    <Content Include="Areas\Manager\Views\Data\Product.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\chart.min.js" />
     <Content Include="Scripts\front.js" />
@@ -188,6 +189,9 @@
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\popper\popper.min.js" />
     <Content Include="Scripts\tether.min.js" />
+    <Content Include="Scripts\webuploader\Uploader.swf" />
+    <Content Include="Scripts\webuploader\webuploader.css" />
+    <Content Include="Scripts\webuploader\webuploader.min.js" />
     <Content Include="Scripts\wEdit\wangEditor.css" />
     <Content Include="Scripts\wEdit\wangEditor.js" />
     <Content Include="Scripts\wEdit\wangEditor.min.css" />

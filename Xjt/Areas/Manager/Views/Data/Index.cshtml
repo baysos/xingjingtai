@@ -1,7 +1,40 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Banner设置";
+    ViewBag.Tag = 1;
 }
+@Styles.Render("/scripts/webuploader/webuploader.css")
+@Scripts.Render("/scripts/webuploader/webuploader.min.js")
 
-<h2>Index</h2>
+
+<div id="picker">选择文件</div>
+<img id="img-yl"/>
+<script>
+    // 初始化Web Uploader
+    var uploader = WebUploader.create({
+        auto: true,
+        swf: '/scripts/webuploader/Uploader.swf',
+        server: '/manager/data/uploadfile',
+        pick: '#picker',
+        accept: {
+            title: 'Images',
+            extensions: 'gif,jpg,jpeg,bmp,png',
+            mimeTypes: 'image/*'
+        }
+    });
+
+    uploader.on( 'uploadSuccess', function( file ) {
+        window.location.reload();
+    });
+
+    uploader.on('uploadError', function (file) {
+        window.location.reload();
+    });
+
+    uploader.on( 'uploadComplete', function( file ) {
+        window.location.reload();
+    });
+
+
+</script>
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -16,6 +17,11 @@ namespace Xjt.Areas.Manager.Controllers
     {
         // GET: Manager/Data
         public ActionResult Index()
+        {
+            return View();
+        }
+
+        public ActionResult Product()
         {
             return View();
         }
@@ -50,6 +56,24 @@ namespace Xjt.Areas.Manager.Controllers
             }
 
             return CommonHelper.ExceptionResult("用户名不存在");
+        }
+
+        [HttpPost]
+        public ActionResult UploadFile(HttpPostedFileBase file)
+        {
+            try
+            {
+                var fileName = file.FileName;
+                var filePath = Server.MapPath($"~/Image/UpLoad");
+                var path = Path.Combine(filePath, fileName);
+                file.SaveAs(path);
+                return CommonHelper.Result(new { msg = "上传成功", path = path });
+            }
+            catch (Exception e)
+            {
+                return CommonHelper.ExceptionResult(new {msg = "上传失败"});
+            }
+
         }
     }
 }
