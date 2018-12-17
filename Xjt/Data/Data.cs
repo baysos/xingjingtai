@@ -25,7 +25,45 @@ namespace Xjt.Data
     {
         public int Id { get; set; }
 
+        /// <summary>
+        /// 型号
+        /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// 型号
+        /// </summary>
+        public string Model { get; set; }
+
+        /// <summary>
+        /// 封装
+        /// </summary>
+        public string Encapsulation { get; set; }
+
+        /// <summary>
+        /// 功率
+        /// </summary>
+        public string Power { get; set; }
+
+        /// <summary>
+        /// 输入电压
+        /// </summary>
+        public string InputVoltage { get; set; }
+
+        /// <summary>
+        /// 输出电压
+        /// </summary>
+        public string OutputVoltage { get; set; }
+
+        /// <summary>
+        /// 输出电流
+        /// </summary>
+        public string OutputElectric { get; set; }
+
+        /// <summary>
+        /// 库存信息
+        /// </summary>
+        public string Stock { get; set; }
 
         public string Content { get; set; }
 

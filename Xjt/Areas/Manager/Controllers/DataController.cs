@@ -75,6 +75,22 @@ namespace Xjt.Areas.Manager.Controllers
         }
 
         [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult AddProductData(Product product)
+        {
+            if (!CheckParamSign())
+            {
+                return CommonHelper.ExceptionResult("无权限！");
+            }
+
+            if (product == null)
+            {
+                return CommonHelper.ExceptionResult("参数有误！");
+            }
+            return CommonHelper.Result("添加成功！");
+        }
+
+        [HttpPost]
         public ActionResult ProductUploadFile(HttpPostedFileBase file)
         {
             try
@@ -83,14 +99,13 @@ namespace Xjt.Areas.Manager.Controllers
                 {
                     return CommonHelper.ExceptionResult(new { msg = "上传失败,无权限！" });
                 }
-
+                var pt = "/Image/UpLoad";
                 var maxSize = 1 * 1024 * 1000;
                 if (file.ContentLength > maxSize)
                 {
                     return CommonHelper.ExceptionResult(new { msg = "上传失败" });
                 }
 
-                var pt = "/Image/UpLoad";
                 var fileName = file.FileName;
                 var filePath = Server.MapPath(pt);
                 var path = Path.Combine(filePath, fileName);

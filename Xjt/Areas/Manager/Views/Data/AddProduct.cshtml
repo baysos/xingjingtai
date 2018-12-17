@@ -1,6 +1,7 @@
 ﻿@using Xjt.Common
 
 @{
+    ViewBag.Tag = 2;
     if (string.IsNullOrWhiteSpace(Request.Params["t"].ToStringEx()))
     {
         ViewBag.Title = "添加主推产品";
@@ -13,6 +14,8 @@
 @Styles.Render("/Style/form.css")
 @Styles.Render("/scripts/webuploader/webuploader.css")
 @Scripts.Render("/scripts/webuploader/webuploader.min.js")
+@Scripts.Render("/scripts/wEdit/wangEditor.min.js")
+
 <div class="content-inner form-cont">
     <div class="row">
         <div class="col-md-12">
@@ -29,10 +32,58 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label for="add-product-model" class="col-sm-2 col-form-label">产品型号</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control is-valid" id="add-product-model" placeholder="产品型号">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="add-product-encapsulation" class="col-sm-2 col-form-label">封装</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control is-valid" id="add-product-encapsulation" placeholder="封装">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="add-product-power" class="col-sm-2 col-form-label">功率</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control is-valid" id="add-product-power" placeholder="功率">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="add-product-inputvoltage" class="col-sm-2 col-form-label">输入电压</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control is-valid" id="add-product-inputvoltage" placeholder="输入电压">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="add-product-outputvoltage" class="col-sm-2 col-form-label">输出电压</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control is-valid" id="add-product-outputvoltage" placeholder="输出电压">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="add-product-outputelectric " class="col-sm-2 col-form-label">输出电流</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control is-valid" id="add-product-outputelectric" placeholder="输出电流">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="add-product-stock " class="col-sm-2 col-form-label">库存信息</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control is-valid" id="add-product-stock" placeholder="库存信息">
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label for="add-product-name" class="col-sm-2 col-form-label">产品图片</label>
                         <div class="col-sm-10">
                             <div id="picker">选择文件</div>
                             <img id="add-product-img" src="" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="add-product-content" class="col-sm-2 col-form-label">产品详情</label>
+                        <div class="col-sm-10">
+                            <div id="add-product-content"></div>
                         </div>
                     </div>
                     <button type="button" class="btn btn-general btn-blue mr-2" id="add-product-add">提交</button>
@@ -72,6 +123,64 @@
         uploader.on('uploadComplete',
             function (file) {
                 $('#add-product-img').attr('src', '/image/upload/' + file.name);
+            });
+
+        //初始化编辑器
+        var E = window.wangEditor;
+        var editor = new E('#add-product-content');
+        // 配置服务器端上传图片地址
+        //editor.customConfig.uploadImgServer = '/manager/data/productuploadfile?' + getUrlSignParamStr() + '&t=1';
+        editor.customConfig.uploadImgMaxLength = 1;
+        editor.customConfig.uploadImgMaxSize = 1 * 1024 * 1024;
+        editor.customConfig.uploadImgShowBase64 = true;
+        editor.create();
+
+        //初始化提交
+        $('#add-product-add').on('click',
+            function() {
+                var name = $('#add-product-name').val();
+                var model = $('#add-product-model').val();
+                var encapsulation = $('#add-product-encapsulation').val();
+                var power = $('#add-product-power').val();
+                var inputvoltage = $('#add-product-inputvoltage').val();
+                var outputvoltage = $('#add-product-outputvoltage').val();
+                var outputelectric = $('#add-product-outputelectric').val();
+                var stock = $('#add-product-stock').val();
+
+                var img = $('#add-product-img').attr('src');
+                var content = editor.txt.html();
+
+                $.ajax({
+                    type: 'post',
+                    url: '/manager/data/addProductData',
+                    data: {
+                        'name': name,
+                        'model': model,
+                        'encapsulation': encapsulation,
+                        'power': power,
+                        'inputvoltage': inputvoltage,
+                        'outputvoltage': outputvoltage,
+                        'outputelectric': outputelectric,
+                        'stock': stock,
+                        'img': img,
+                        'content': content,
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.code === 500) {
+                            alert(data.data);
+                            return;
+                        }
+
+                        window.location = '/manager/data/product?' + getUrlSignParamStr();
+                    }
+                });
+            });
+
+        //初始化取消
+        $('#add-product-cancel').on('click',
+            function () {
+                window.location.href = '/manager/data/product?' + getUrlSignParamStr();
             });
     });
 </script>
