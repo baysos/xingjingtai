@@ -1,40 +1,58 @@
-﻿
+﻿@using Xjt.Data
+
 @{
     ViewBag.Title = "Banner设置";
     ViewBag.Tag = 1;
+    Banner banner = ViewBag.Banner as Banner;
 }
 @Styles.Render("/scripts/webuploader/webuploader.css")
 @Scripts.Render("/scripts/webuploader/webuploader.min.js")
 
-
+<h3>图片大小：1920(宽)*500(高) 建议图片压缩到1M以内，超过5M则不允许上传</h3>
 <div id="picker">选择文件</div>
-<img id="img-yl"/>
+<img id="img-yl" width="1152" height="300" />
 <script>
-    // 初始化Web Uploader
-    var uploader = WebUploader.create({
-        auto: true,
-        swf: '/scripts/webuploader/Uploader.swf',
-        server: '/manager/data/uploadfile',
-        pick: '#picker',
-        accept: {
-            title: 'Images',
-            extensions: 'gif,jpg,jpeg,bmp,png',
-            mimeTypes: 'image/*'
-        }
+    var uploader;
+    $(function() {
+        $('#img-yl').attr('src', '@((banner != null ? banner.Img : string.Empty))');
+        $('#img-yl').attr('title', '@((banner != null ? banner.Title : string.Empty))');
+
+        initUploader();
     });
 
-    uploader.on( 'uploadSuccess', function( file ) {
-        window.location.reload();
-    }); 
+    function initUploader() {
+        // 初始化Web Uploader
+        uploader = WebUploader.create({
+            auto: true,
+            swf: '/scripts/webuploader/Uploader.swf',
+            server: '/manager/data/uploadfile?' + getUrlSignParamStr(),
+            pick: '#picker',
+            accept: {
+                title: 'Images',
+                extensions: 'gif,jpg,jpeg,bmp,png',
+                mimeTypes: 'image/*'
+            }
+        });
 
-    uploader.on('uploadError', function (file) {
-        window.location.reload();
-    });
+        uploader.on('uploadSuccess',
+            function (file) {
+                if (file.size > 5 * 1024 * 1000) {
+                    alert('上传图片超过5M，禁止上传');
+                }
 
-    uploader.on( 'uploadComplete', function( file ) {
-        window.location.reload();
-    });
+                //window.location.reload();
+            });
 
+        uploader.on('uploadError',
+            function (file) {
+                window.location.reload();
+            });
+
+        uploader.on('uploadComplete',
+            function (file) {
+                window.location.reload();
+            });
+    }
 
 </script>
 

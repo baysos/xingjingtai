@@ -135,6 +135,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\Manager\Controllers\BaseController.cs" />
     <Compile Include="Areas\Manager\Controllers\DataController.cs" />
     <Compile Include="Areas\Manager\ManagerAreaRegistration.cs" />
     <Compile Include="Areas\Manager\Models\ResultType.cs" />
@@ -176,6 +177,7 @@
     <Content Include="Data\Product.config" />
     <Content Include="Data\Banner.config" />
     <Content Include="Areas\Manager\Views\Data\Product.cshtml" />
+    <Content Include="Areas\Manager\Views\Data\AddProduct.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\chart.min.js" />
     <Content Include="Scripts\front.js" />
@@ -201,6 +203,7 @@
     <Content Include="Style\font-awesome-4.7.0\fonts\fontawesome-webfont.svg" />
     <Content Include="Style\font-awesome-4.7.0\HELP-US-OUT.txt" />
     <Content Include="Style\font-icon-style.css" />
+    <Content Include="Style\form.css" />
     <Content Include="Style\roboto_condensed.css" />
     <Content Include="Style\style.default.css" />
     <Content Include="Web.config">
@@ -256,7 +259,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Image\UpLoad\" />
+    <Folder Include="Image\UpLoad\Banner\" />
     <Folder Include="Service\" />
   </ItemGroup>
   <ItemGroup>

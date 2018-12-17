@@ -7,7 +7,9 @@ namespace Xjt.Data
 {
     public class Data
     {
+        public static Banner Banner = new Banner();
 
+        public static List<Product> ProductList = new List<Product>();
     }
 
     public class User
@@ -21,6 +23,8 @@ namespace Xjt.Data
 
     public class Product
     {
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
         public string Content { get; set; }

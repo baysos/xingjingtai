@@ -1,8 +1,51 @@
-﻿
+﻿@using Xjt.Data
+
 @{
     ViewBag.Title = "主推产品设置";
     ViewBag.Tag = 2;
+    var productList = ViewBag.List as List<Product>;
+
 }
 
-<h2>Product</h2>
+<button type="button" class="btn btn-primary" id="add-product">添加</button>
+<div class="content-inner chart-cont">
 
+    <div class="row">
+        <table class="table table-hover" id="table-data">
+            <thead>
+                <tr class="bg-info text-white">
+                    <th>序号</th>
+                    <th>产品名</th>
+                    <th>图片</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @*<tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                    </tr>*@
+                @if (productList != null && productList.Count > 0)
+                {
+                    foreach (var prd in productList)
+                    {
+                        <tr>
+                            <th scope="row">@prd.Id</th>
+                            <td>@prd.Name</td>
+                            <td><img src="@prd.Img" width="115" height="100" /></td>
+                            <td>@prd.Name</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#add-product').on('click', function () {
+            window.location.href = "/manager/data/addproduct?" + getUrlSignParamStr();
+        });
+    });
+</script>

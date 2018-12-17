@@ -16,15 +16,15 @@
 <body>
     <header class="header">
         <nav class="navbar navbar-expand-lg ">
-            <a>退出</a>
+            <a href="/Manager/data/login" style="margin-left: 18px;">退出</a>&nbsp;&nbsp;
             <a>修改密码</a>
         </nav>
     </header>
     <div class="page-content d-flex align-items-stretch">
         <nav class="side-navbar">
             <ul class="list-unstyled">
-                <li class="@(ViewBag.Tag==1?"active":string.Empty)"> <a href="/manager/data/index?s=@(Request.Params["s"])&name=@(Request.Params["n"])"> <i class="icon-grid"></i>Banner设置</a></li>
-                <li class="@(ViewBag.Tag==2?"active":string.Empty)"> <a href="/manager/data/product?s=@(Request.Params["s"])&name=@(Request.Params["n"])"> <i class="icon-grid"></i>主推产品设置</a></li>
+                <li class="@(ViewBag.Tag==1?"active":string.Empty)"> <a href="/manager/data/index?s=@(Request.Params["s"])&n=@(Request.Params["n"])"> <i class="icon-grid"></i>Banner设置</a></li>
+                <li class="@(ViewBag.Tag==2?"active":string.Empty)"> <a href="/manager/data/product?s=@(Request.Params["s"])&n=@(Request.Params["n"])"> <i class="icon-grid"></i>主推产品设置</a></li>
             </ul>
         </nav>
         <script src="~/Scripts/jquery-3.3.1.min.js"></script>
@@ -35,6 +35,18 @@
         <script src="~/Scripts/jquery.validate.min.js"></script>
         <script src="~/Scripts/chart.min.js"></script>
         <script src="~/Scripts/front.js"></script>
+        <script>
+            //获取url中的参数
+            function getUrlParam(name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+                var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+                if (r != null) return decodeURI(r[2]); return null; //返回参数值
+            }
+
+            function getUrlSignParamStr() {
+                return 's=' + getUrlParam('s') + '&n=' + getUrlParam('n');
+            }
+        </script>
         <div class="content-inner chart-cont">
             @RenderBody()
         </div>

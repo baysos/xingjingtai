@@ -1,0 +1,77 @@
+﻿@using Xjt.Common
+
+@{
+    if (string.IsNullOrWhiteSpace(Request.Params["t"].ToStringEx()))
+    {
+        ViewBag.Title = "添加主推产品";
+    }
+    else
+    {
+        ViewBag.Title = "修改主推产品";
+    }
+}
+@Styles.Render("/Style/form.css")
+@Styles.Render("/scripts/webuploader/webuploader.css")
+@Scripts.Render("/scripts/webuploader/webuploader.min.js")
+<div class="content-inner form-cont">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card form" id="form1">
+                <div class="card-header">
+                    <h3>@(ViewBag.Title)</h3>
+                </div>
+                <br>
+                <form>
+                    <div class="form-group row">
+                        <label for="add-product-name" class="col-sm-2 col-form-label">产品名</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control is-valid" id="add-product-name" placeholder="产品名">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="add-product-name" class="col-sm-2 col-form-label">产品图片</label>
+                        <div class="col-sm-10">
+                            <div id="picker">选择文件</div>
+                            <img id="add-product-img" src="" />
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-general btn-blue mr-2" id="add-product-add">提交</button>
+                    <button type="button" class="btn btn-general btn-white" id="add-product-cancel">取消</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="add-product-id" value="" />
+<script>
+    var pid;
+    $(function () {
+        pid = getUrlParam('id');
+        $('#add-product-id').val(pid);
+
+        // 初始化Web Uploader
+        var uploader = WebUploader.create({
+            auto: true,
+            swf: '/scripts/webuploader/Uploader.swf',
+            server: '/manager/data/productuploadfile?' + getUrlSignParamStr() + '&id=' + pid,
+            pick: '#picker',
+            accept: {
+                title: 'Images',
+                extensions: 'gif,jpg,jpeg,bmp,png',
+                mimeTypes: 'image/*'
+            }
+        });
+
+        uploader.on('uploadSuccess', function (file) {
+            if (file.size > 1 * 1024 * 1000) {
+                alert('上传图片超过1M，禁止上传');
+            }
+        });
+
+        uploader.on('uploadComplete',
+            function (file) {
+                $('#add-product-img').attr('src', '/image/upload/' + file.name);
+            });
+    });
+</script>

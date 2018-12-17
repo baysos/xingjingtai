@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using Xjt.Areas.Manager.Models;
+using Xjt.Data;
 
 namespace Xjt.Common
 {
@@ -29,7 +30,7 @@ namespace Xjt.Common
             var jsonResult = new JsonResult
             {
                 ContentType = "application/json",
-                Data = new { code = (int)type, data = JsonConvert.SerializeObject(obj) }
+                Data = new { code = (int)type, data = (obj is string ? obj : JsonConvert.SerializeObject(obj)) }
             };
 
             return jsonResult;
@@ -38,18 +39,50 @@ namespace Xjt.Common
         public static T GetJsonModel<T>(string fileName)
         {
             var value = default(T);
-            var path = HostingEnvironment.MapPath($"/Data/{fileName}.config");
-            if (File.Exists(path))
+            try
             {
-                var content = File.ReadAllText(path);
-                content = content.Replace("\\r\\n", string.Empty);
-                if (!string.IsNullOrWhiteSpace(content))
+                var path = HostingEnvironment.MapPath($"/Data/{fileName}.config");
+                if (File.Exists(path))
                 {
-                    return JsonConvert.DeserializeObject<T>(content);
+                    var content = File.ReadAllText(path);
+                    content = content.Replace("\\r\\n", string.Empty);
+                    if (!string.IsNullOrWhiteSpace(content))
+                    {
+                        return JsonConvert.DeserializeObject<T>(content);
+                    }
                 }
+
+                return value;
+            }
+            catch (Exception e)
+            {
+                return value;
             }
 
-            return value;
+        }
+
+        public static bool SaveJsonModel(object obj, string fileName)
+        {
+            try
+            {
+                var path = HostingEnvironment.MapPath($"/Data/{fileName}.config");
+                if (File.Exists(path))
+                {
+                    var json = obj is string ? obj.ToStringEx() : JsonConvert.SerializeObject(obj);
+                    File.WriteAllText(path, json);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+
         }
     }
 }
