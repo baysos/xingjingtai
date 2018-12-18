@@ -1,4 +1,5 @@
-﻿@using Xjt.Data
+﻿@using Xjt.Common
+@using Xjt.Data
 
 @{
     ViewBag.Title = "主推产品设置";
@@ -34,7 +35,10 @@
                             <th scope="row">@prd.Id</th>
                             <td>@prd.Name</td>
                             <td><img src="@prd.Img" width="115" height="100" /></td>
-                            <td>@prd.Name</td>
+                            <td>
+                                <a href="/manager/data/addproduct?s=@Request.Params["s"].ToStringEx()&n=@Request.Params["n"].ToStringEx()&id=@prd.Id">编辑</a>&nbsp;&nbsp;
+                                <a>删除</a>
+                            </td>
                         </tr>
                     }
                 }

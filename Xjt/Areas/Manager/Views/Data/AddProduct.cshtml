@@ -1,15 +1,24 @@
 ﻿@using Xjt.Common
+@using Xjt.Data
 
 @{
     ViewBag.Tag = 2;
-    if (string.IsNullOrWhiteSpace(Request.Params["t"].ToStringEx()))
+    var id = Request.Params["id"].ToStringEx();
+    Product product = null;
+    if (string.IsNullOrWhiteSpace(id))
     {
         ViewBag.Title = "添加主推产品";
     }
     else
     {
         ViewBag.Title = "修改主推产品";
+        var list = CommonHelper.GetJsonModel<List<Product>>("Product");
+        if (list != null)
+        {
+            product = list.Find(a => a.Id == TryConvertUtil.ToInt(id));
+        }
     }
+
 }
 @Styles.Render("/Style/form.css")
 @Styles.Render("/scripts/webuploader/webuploader.css")
@@ -28,62 +37,63 @@
                     <div class="form-group row">
                         <label for="add-product-name" class="col-sm-2 col-form-label">产品名</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control is-valid" id="add-product-name" placeholder="产品名">
+                            <input class="form-control is-valid" id="add-product-name" placeholder="产品名" value="@(product!=null?product.Name:string.Empty)">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="add-product-model" class="col-sm-2 col-form-label">产品型号</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control is-valid" id="add-product-model" placeholder="产品型号">
+                            <input class="form-control is-valid" id="add-product-model" placeholder="产品型号" value="@(product!=null?product.Model:string.Empty)">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="add-product-encapsulation" class="col-sm-2 col-form-label">封装</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control is-valid" id="add-product-encapsulation" placeholder="封装">
+                            <input class="form-control is-valid" id="add-product-encapsulation" placeholder="封装" value="@(product!=null?product.Encapsulation:string.Empty)">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="add-product-power" class="col-sm-2 col-form-label">功率</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control is-valid" id="add-product-power" placeholder="功率">
+                            <input class="form-control is-valid" id="add-product-power" placeholder="功率" value="@(product!=null?product.Power:string.Empty)">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="add-product-inputvoltage" class="col-sm-2 col-form-label">输入电压</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control is-valid" id="add-product-inputvoltage" placeholder="输入电压">
+                            <input class="form-control is-valid" id="add-product-inputvoltage" placeholder="输入电压" value="@(product!=null?product.InputVoltage:string.Empty)">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="add-product-outputvoltage" class="col-sm-2 col-form-label">输出电压</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control is-valid" id="add-product-outputvoltage" placeholder="输出电压">
+                            <input class="form-control is-valid" id="add-product-outputvoltage" placeholder="输出电压" value="@(product!=null?product.OutputVoltage:string.Empty)">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="add-product-outputelectric " class="col-sm-2 col-form-label">输出电流</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control is-valid" id="add-product-outputelectric" placeholder="输出电流">
+                            <input class="form-control is-valid" id="add-product-outputelectric" placeholder="输出电流" value="@(product!=null?product.OutputElectric:string.Empty)">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="add-product-stock " class="col-sm-2 col-form-label">库存信息</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control is-valid" id="add-product-stock" placeholder="库存信息">
+                            <input class="form-control is-valid" id="add-product-stock" placeholder="库存信息" value="@(product!=null?product.Stock:string.Empty)">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="add-product-name" class="col-sm-2 col-form-label">产品图片</label>
                         <div class="col-sm-10">
                             <div id="picker">选择文件</div>
-                            <img id="add-product-img" src="" />
+                            <img id="add-product-img" src="@(product!=null?product.Img:string.Empty)" />
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="add-product-content" class="col-sm-2 col-form-label">产品详情</label>
                         <div class="col-sm-10">
-                            <div id="add-product-content"></div>
+                            <div id="add-product-content">
+                            </div>
                         </div>
                     </div>
                     <button type="button" class="btn btn-general btn-blue mr-2" id="add-product-add">提交</button>
@@ -94,13 +104,10 @@
         </div>
     </div>
 </div>
-<input type="hidden" id="add-product-id" value="" />
 <script>
     var pid;
     $(function () {
         pid = getUrlParam('id');
-        $('#add-product-id').val(pid);
-
         // 初始化Web Uploader
         var uploader = WebUploader.create({
             auto: true,
@@ -134,10 +141,11 @@
         editor.customConfig.uploadImgMaxSize = 1 * 1024 * 1024;
         editor.customConfig.uploadImgShowBase64 = true;
         editor.create();
+        editor.txt.html('@(product != null ? product.Content : string.Empty)');
 
         //初始化提交
         $('#add-product-add').on('click',
-            function() {
+            function () {
                 var name = $('#add-product-name').val();
                 var model = $('#add-product-model').val();
                 var encapsulation = $('#add-product-encapsulation').val();
@@ -152,8 +160,9 @@
 
                 $.ajax({
                     type: 'post',
-                    url: '/manager/data/addProductData',
+                    url: '/manager/data/updateproductdata?' + getUrlSignParamStr(),
                     data: {
+                        'id': pid ? pid : null,
                         'name': name,
                         'model': model,
                         'encapsulation': encapsulation,
@@ -163,7 +172,7 @@
                         'outputelectric': outputelectric,
                         'stock': stock,
                         'img': img,
-                        'content': content,
+                        'content': content
                     },
                     dataType: "json",
                     success: function (data) {

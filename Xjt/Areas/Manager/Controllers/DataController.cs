@@ -71,22 +71,55 @@ namespace Xjt.Areas.Manager.Controllers
 
         public ActionResult AddProduct()
         {
+
             return View();
         }
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult AddProductData(Product product)
+        public ActionResult UpdateProductData(Product product)
         {
             if (!CheckParamSign())
             {
                 return CommonHelper.ExceptionResult("无权限！");
             }
-
             if (product == null)
             {
                 return CommonHelper.ExceptionResult("参数有误！");
             }
+
+            var list = CommonHelper.GetJsonModel<List<Product>>("Product");
+
+            //添加
+            if (product.Id == 0)
+            {
+                var id = 0;
+                if (list != null && list.Count > 0)
+                {
+                    list = list.OrderByDescending(a => a.Id).ToList();
+                    id = list[0].Id + 1;
+                    product.Id = id;
+                    list.Add(product);
+                }
+                else
+                {
+                    list = new List<Product>();
+                    product.Id = 1;
+                    list.Add(product);
+                }
+                
+            }
+            else //修改
+            {
+                var pdt = list.Find(a => a.Id == product.Id);
+                if (pdt != null)
+                {
+                    list.RemoveAll(a => a.Id == product.Id);
+                    list.Add(product);
+                }
+            }
+            CommonHelper.SaveJsonModel(list, "Product");
+
             return CommonHelper.Result("添加成功！");
         }
 
