@@ -141,7 +141,6 @@
     <Compile Include="Areas\Manager\Models\ResultType.cs" />
     <Compile Include="Common\CommonHelper.cs" />
     <Compile Include="Common\ConstValue.cs" />
-    <Compile Include="Common\CustomActionFilterAttribute.cs" />
     <Compile Include="Common\IdentityVerification.cs" />
     <Compile Include="Common\SecurityHelper.cs" />
     <Compile Include="Common\TryConvertUtil.cs" />
@@ -178,9 +177,13 @@
     <Content Include="Data\Banner.config" />
     <Content Include="Areas\Manager\Views\Data\Product.cshtml" />
     <Content Include="Areas\Manager\Views\Data\AddProduct.cshtml" />
+    <Content Include="Data\Other.config" />
+    <Content Include="Areas\Manager\Views\Data\Other.cshtml" />
+    <Content Include="Areas\Manager\Views\Data\Test.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\chart.min.js" />
     <Content Include="Scripts\front.js" />
+    <Content Include="Scripts\htmlutil.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />

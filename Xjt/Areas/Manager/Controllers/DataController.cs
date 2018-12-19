@@ -13,18 +13,13 @@ namespace Xjt.Areas.Manager.Controllers
 {
     public class DataController : BaseController
     {
-        // GET: Manager/Data
-        public ActionResult Index()
-        {
-            var banner = CommonHelper.GetJsonModel<Banner>("Banner");
-            if (banner != null)
-            {
-                ViewBag.Banner = banner;
-            }
-            return View();
-        }
 
         #region 用户相关
+
+        public ActionResult Test()
+        {
+            return View();
+        }
 
         public ActionResult Login(string name, string pass)
         {
@@ -49,6 +44,8 @@ namespace Xjt.Areas.Manager.Controllers
                     return CommonHelper.ExceptionResult("用户名或密码错误");
                 }
 
+                user.LastLoginTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                CommonHelper.SaveJsonModel(userList, "User");
                 var sign = Guid.NewGuid().ToStringEx();
                 CommonHelper.SignDic[name] = sign;
 
@@ -58,10 +55,38 @@ namespace Xjt.Areas.Manager.Controllers
             return CommonHelper.ExceptionResult("用户名不存在");
         }
 
+        [HttpPost]
+        [IdentityVerificationAjax]
+        public ActionResult ChangePass(string name, string oldPass, string newPass)
+        {
+            var userList = CommonHelper.GetJsonModel<List<User>>("User");
+            if (userList != null && userList.Count > 0)
+            {
+                var user = userList.Find(a => a.Name == name);
+                if (user == null)
+                {
+                    return CommonHelper.ExceptionResult("用户名不存在");
+                }
+
+                var p = SecurityHelper.CreateMd5Str(oldPass + ConstValue.PassSalt);
+                if (user.Pass != p)
+                {
+                    return CommonHelper.ExceptionResult("用户名或密码错误");
+                }
+
+                p = SecurityHelper.CreateMd5Str(newPass + ConstValue.PassSalt);
+                user.Pass = p;
+                CommonHelper.SaveJsonModel(userList, "User");
+            }
+
+            return CommonHelper.ExceptionResult("用户数据有误！");
+        }
+
         #endregion
 
         #region 产品相关
 
+        [IdentityVerification]
         public ActionResult Product()
         {
             var list = CommonHelper.GetJsonModel<List<Product>>("Product");
@@ -69,20 +94,22 @@ namespace Xjt.Areas.Manager.Controllers
             return View();
         }
 
+        [IdentityVerification]
         public ActionResult AddProduct()
         {
-
             return View();
         }
 
+        /// <summary>
+        /// 添加 修改 产品信息
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateInput(false)]
+        [IdentityVerificationAjax]
         public ActionResult UpdateProductData(Product product)
         {
-            if (!CheckParamSign())
-            {
-                return CommonHelper.ExceptionResult("无权限！");
-            }
             if (product == null)
             {
                 return CommonHelper.ExceptionResult("参数有误！");
@@ -99,15 +126,15 @@ namespace Xjt.Areas.Manager.Controllers
                     list = list.OrderByDescending(a => a.Id).ToList();
                     id = list[0].Id + 1;
                     product.Id = id;
-                    list.Add(product);
                 }
                 else
                 {
                     list = new List<Product>();
                     product.Id = 1;
-                    list.Add(product);
                 }
-                
+
+                product.Order = product.Id;
+                list.Add(product);
             }
             else //修改
             {
@@ -115,6 +142,7 @@ namespace Xjt.Areas.Manager.Controllers
                 if (pdt != null)
                 {
                     list.RemoveAll(a => a.Id == product.Id);
+                    product.Order = pdt.Order;
                     list.Add(product);
                 }
             }
@@ -123,15 +151,96 @@ namespace Xjt.Areas.Manager.Controllers
             return CommonHelper.Result("添加成功！");
         }
 
+        /// <summary>
+        /// 删除产品信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost]
+        [IdentityVerificationAjax]
+        public ActionResult DelProductData(int id)
+        {
+            var list = CommonHelper.GetJsonModel<List<Product>>("Product");
+            var removeModel = list.Find(a => a.Id == id);
+            var img = removeModel != null ? removeModel.Img : string.Empty;
+            list.RemoveAll(a => a.Id == id);
+
+            CommonHelper.SaveJsonModel(list, "Product");
+
+            if (!string.IsNullOrWhiteSpace(img))
+            {
+                //删除文件
+                var imgPath = HostingEnvironment.MapPath(img);
+                if (System.IO.File.Exists(imgPath))
+                {
+                    System.IO.File.Delete(imgPath);
+                }
+            }
+
+            return CommonHelper.Result("删除成功！");
+        }
+
+        /// <summary>
+        /// 产品重排序
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [IdentityVerificationAjax]
+        public ActionResult OrderProduct(int id, int type)
+        {
+            var list = CommonHelper.GetJsonModel<List<Product>>("Product");
+            var isUpdate = false;
+            if (list != null && list.Count > 0)
+            {
+                var model = list.Find(a => a.Id == id);
+                if (model != null)
+                {
+                    Product md = null;
+                    //上移
+                    if (type == 1)
+                    {
+                        var listTemp = list.FindAll(a => a.Order < model.Order).OrderByDescending(a => a.Order)
+                            .ToList();
+
+                        md = listTemp.Count > 0 ? listTemp[0] : null;
+                    }
+                    else //下移
+                    {
+                        var listTemp = list.FindAll(a => a.Order > model.Order).OrderBy(a => a.Order).ToList();
+
+                        md = listTemp.Count > 0 ? listTemp[0] : null;
+                    }
+
+                    if (md != null)
+                    {
+                        md.Order = md.Order + model.Order;
+                        model.Order = md.Order - model.Order;
+                        list.Find(a => a.Id == md.Id).Order = md.Order - model.Order;
+                        isUpdate = true;
+                    }
+
+                    CommonHelper.SaveJsonModel(list, "Product");
+                }
+            }
+
+            if (isUpdate)
+            {
+                return CommonHelper.Result("操作成功");
+            }
+            else
+            {
+                return CommonHelper.Result("未操作");
+            }
+        }
+
+        [HttpPost]
+        [IdentityVerificationAjax]
         public ActionResult ProductUploadFile(HttpPostedFileBase file)
         {
             try
             {
-                if (!CheckParamSign())
-                {
-                    return CommonHelper.ExceptionResult(new { msg = "上传失败,无权限！" });
-                }
                 var pt = "/Image/UpLoad";
                 var maxSize = 1 * 1024 * 1000;
                 if (file.ContentLength > maxSize)
@@ -157,15 +266,23 @@ namespace Xjt.Areas.Manager.Controllers
 
         #region Banner相关
 
+        [IdentityVerification]
+        public ActionResult Index()
+        {
+            var banner = CommonHelper.GetJsonModel<Banner>("Banner");
+            if (banner != null)
+            {
+                ViewBag.Banner = banner;
+            }
+            return View();
+        }
+
         [HttpPost]
+        [IdentityVerificationAjax]
         public ActionResult UploadFile(HttpPostedFileBase file)
         {
             try
             {
-                if (!CheckParamSign())
-                {
-                    return CommonHelper.ExceptionResult(new { msg = "上传失败,无权限！" });
-                }
 
                 var maxSizeSetting = ConfigurationManager.AppSettings["BannerImgMaxLength"];
                 var maxSize = 0;
@@ -206,6 +323,29 @@ namespace Xjt.Areas.Manager.Controllers
                 return CommonHelper.ExceptionResult(new { msg = "上传失败" });
             }
 
+        }
+
+        #endregion
+
+        #region 其他设置
+
+        [IdentityVerification]
+        public ActionResult Other()
+        {
+            return View();
+        }
+        
+        [HttpPost]
+        [IdentityVerificationAjax]
+        public ActionResult UpdateOtherData(Other model)
+        {
+            if (model == null)
+            {
+                return CommonHelper.ExceptionResult("参数有误");
+            }
+
+            CommonHelper.SaveJsonModel(model, "Other");
+            return CommonHelper.Result("更新成功！");
         }
 
         #endregion

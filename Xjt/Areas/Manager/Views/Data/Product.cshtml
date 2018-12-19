@@ -5,7 +5,8 @@
     ViewBag.Title = "主推产品设置";
     ViewBag.Tag = 2;
     var productList = ViewBag.List as List<Product>;
-
+    productList = productList ?? new List<Product>();
+    productList = productList.OrderBy(a => a.Order).ToList();
 }
 
 <button type="button" class="btn btn-primary" id="add-product">添加</button>
@@ -15,7 +16,7 @@
         <table class="table table-hover" id="table-data">
             <thead>
                 <tr class="bg-info text-white">
-                    <th>序号</th>
+                    <th>排序</th>
                     <th>产品名</th>
                     <th>图片</th>
                     <th>操作</th>
@@ -32,12 +33,14 @@
                     foreach (var prd in productList)
                     {
                         <tr>
-                            <th scope="row">@prd.Id</th>
+                            <th scope="row">@prd.Order</th>
                             <td>@prd.Name</td>
                             <td><img src="@prd.Img" width="115" height="100" /></td>
                             <td>
                                 <a href="/manager/data/addproduct?s=@Request.Params["s"].ToStringEx()&n=@Request.Params["n"].ToStringEx()&id=@prd.Id">编辑</a>&nbsp;&nbsp;
-                                <a>删除</a>
+                                <a href="javascript:;" onclick="delproduct(@prd.Id)">删除</a>
+                                <a href="javascript:;" onclick="upproduct(@prd.Id)">上移</a>
+                                <a href="javascript:;" onclick="downproduct(@prd.Id)">下移</a>
                             </td>
                         </tr>
                     }
@@ -52,4 +55,65 @@
             window.location.href = "/manager/data/addproduct?" + getUrlSignParamStr();
         });
     });
+
+    function delproduct(id) {
+        if (window.confirm("确定删除该条数据？")) {
+            $.ajax({
+                type: 'post',
+                url: '/manager/data/delproductdata?' + getUrlSignParamStr(),
+                data: {
+                    'id': id
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data.code === 500) {
+                        alert(data.data);
+                        return;
+                    }
+                    if (data.code === 302) {
+                        alert('权限不足');
+                        window.location.href = data.data;
+                        return;
+                    }
+
+                    window.location.reload();
+                }
+            });
+        }
+    }
+
+    function upproduct(id) {
+        orderproduct(id, 1);
+    }
+
+    function downproduct(id) {
+        orderproduct(id, 2);
+    }
+
+    function orderproduct(id, type) {
+        $.ajax({
+            type: 'post',
+            url: '/manager/data/orderproduct?'+ getUrlSignParamStr(),
+            data: {
+                'id': id,
+                'type': type
+            },
+            dataType: "json",
+            success: function (data) {
+                if (data.code === 500) {
+                    alert(data.data);
+                    return;
+                }
+                if (data.code === 302) {
+                    alert('权限不足');
+                    window.location.href = data.data;
+                    return;
+                }
+
+                if (data.data =='操作成功') {
+                    window.location.reload();
+                }
+            }
+        });
+    }
 </script>

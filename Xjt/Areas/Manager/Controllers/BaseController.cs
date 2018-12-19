@@ -3,30 +3,59 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Xjt.Areas.Manager.Models;
 using Xjt.Common;
 
 namespace Xjt.Areas.Manager.Controllers
 {
     public class BaseController: Controller
     {
-        public bool CheckParamSign()
+
+    }
+
+    public class MyActionFilter : ActionFilterAttribute
+    {
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var sign = Request.Params["s"];
-            var name = Request.Params["n"];
-            if (CommonHelper.SignDic.ContainsKey(name))
+            base.OnActionExecuting(filterContext);
+
+            object[] att = filterContext.ActionDescriptor.GetCustomAttributes(typeof(IdentityVerification), false);
+            if (att.Length > 0)
             {
-                if (CommonHelper.SignDic[name] != sign)
+                var sign = filterContext.HttpContext.Request.Params["s"].ToStringEx();
+                var name = filterContext.HttpContext.Request.Params["n"].ToStringEx();
+                if (CommonHelper.SignDic.ContainsKey(name))
                 {
-                    return false;
+                    if (CommonHelper.SignDic[name] != sign)
+                    {
+                        
+                        filterContext.Result = new RedirectResult("/manager/data/login");
+                    }
                 }
-
+                else
+                {
+                    filterContext.Result = new RedirectResult("/manager/data/login");
+                }
             }
-            else
+
+            att = filterContext.ActionDescriptor.GetCustomAttributes(typeof(IdentityVerificationAjax), false);
+            if (att.Length > 0)
             {
-                return false;
-            }
+                var sign = filterContext.HttpContext.Request.Params["s"].ToStringEx();
+                var name = filterContext.HttpContext.Request.Params["n"].ToStringEx();
+                if (CommonHelper.SignDic.ContainsKey(name))
+                {
+                    if (CommonHelper.SignDic[name] != sign)
+                    {
 
-            return true;
+                        filterContext.Result = CommonHelper.Result(ResultType.Authorization, "/manager/data/login");
+                    }
+                }
+                else
+                {
+                    filterContext.Result = CommonHelper.Result(ResultType.Authorization, "/manager/data/login");
+                }
+            }
         }
     }
 }

@@ -1,0 +1,57 @@
+﻿@using Xjt.Common
+@using Xjt.Data
+
+@{
+    ViewBag.Title = "其他设置";
+    ViewBag.Tag = 3;
+
+    var other = CommonHelper.GetJsonModel<Other>("Other");
+    other = other ?? new Other();
+}
+@Styles.Render("/Style/form.css")
+<div class="content-inner form-cont">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card form" id="form1" style="padding-top: 16px;">
+                <form>
+                    <div class="form-group row">
+                        <label for="other-phone" class="col-sm-2 col-form-label">联系电话</label>
+                        <div class="col-sm-10">
+                            <input class="form-control is-valid" id="other-phone" placeholder="联系电话" value="@(other.Phone??string.Empty)">
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-general btn-blue mr-2" id="other-commit">更新</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#other-commit').on('click', function () {
+            var phone = $('#other-phone').val();
+            $.ajax({
+                type: 'post',
+                url: '/manager/data/updateotherdata?' + getUrlSignParamStr(),
+                data: {
+                    'phone': phone
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data.code === 500) {
+                        alert(data.data);
+                        return;
+                    }
+                    if (data.code === 302) {
+                        alert('权限不足');
+                        window.location.href = data.data;
+                        return;
+                    }
+                    
+                    window.location.reload();
+                }
+            });
+
+        });
+    });
+</script>

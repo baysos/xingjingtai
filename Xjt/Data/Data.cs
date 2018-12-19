@@ -26,6 +26,11 @@ namespace Xjt.Data
         public int Id { get; set; }
 
         /// <summary>
+        /// 排序
+        /// </summary>
+        public int Order { get; set; }
+
+        /// <summary>
         /// 型号
         /// </summary>
         public string Name { get; set; }
@@ -75,5 +80,13 @@ namespace Xjt.Data
         public string Img { get; set; }
 
         public string Title { get; set; }
+    }
+
+    public class Other
+    {
+        /// <summary>
+        /// 联系电话
+        /// </summary>
+        public string Phone { get; set; }
     }
 }

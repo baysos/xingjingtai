@@ -21,7 +21,7 @@ namespace Xjt
                 defaults: new { id = RouteParameter.Optional }
             );
 
-            config.Filters.Add(new CustomActionFilterAttribute());
+            //config.Filters.Add(new CustomActionFilterAttribute());
         }
     }
 }

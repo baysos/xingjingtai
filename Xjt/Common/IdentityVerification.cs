@@ -9,4 +9,9 @@ namespace Xjt.Common
     public class IdentityVerification : System.Attribute
     {
     }
+
+    [AttributeUsage(AttributeTargets.Method)]
+    public class IdentityVerificationAjax : System.Attribute
+    {
+    }
 }
