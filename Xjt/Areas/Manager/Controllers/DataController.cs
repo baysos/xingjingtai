@@ -115,40 +115,49 @@ namespace Xjt.Areas.Manager.Controllers
                 return CommonHelper.ExceptionResult("参数有误！");
             }
 
-            var list = CommonHelper.GetJsonModel<List<Product>>("Product");
-
-            //添加
-            if (product.Id == 0)
+            try
             {
-                var id = 0;
-                if (list != null && list.Count > 0)
-                {
-                    list = list.OrderByDescending(a => a.Id).ToList();
-                    id = list[0].Id + 1;
-                    product.Id = id;
-                }
-                else
-                {
-                    list = new List<Product>();
-                    product.Id = 1;
-                }
+                Data.Data.ClearDataByType(DataTypeEnum.Product);
+                var list = CommonHelper.GetJsonModel<List<Product>>("Product");
 
-                product.Order = product.Id;
-                list.Add(product);
-            }
-            else //修改
-            {
-                var pdt = list.Find(a => a.Id == product.Id);
-                if (pdt != null)
+                //添加
+                if (product.Id == 0)
                 {
-                    list.RemoveAll(a => a.Id == product.Id);
-                    product.Order = pdt.Order;
+                    var id = 0;
+                    if (list != null && list.Count > 0)
+                    {
+                        list = list.OrderByDescending(a => a.Id).ToList();
+                        id = list[0].Id + 1;
+                        product.Id = id;
+                    }
+                    else
+                    {
+                        list = new List<Product>();
+                        product.Id = 1;
+                    }
+
+                    product.Order = product.Id;
                     list.Add(product);
                 }
-            }
-            CommonHelper.SaveJsonModel(list, "Product");
+                else //修改
+                {
+                    var pdt = list.Find(a => a.Id == product.Id);
+                    if (pdt != null)
+                    {
+                        list.RemoveAll(a => a.Id == product.Id);
+                        product.Order = pdt.Order;
+                        list.Add(product);
+                    }
+                }
+                CommonHelper.SaveJsonModel(list, "Product");
 
-            return CommonHelper.Result("添加成功！");
+                return CommonHelper.Result("添加成功！");
+            }
+            catch (Exception e)
+            {
+                return CommonHelper.ExceptionResult("添加失败！e:" + e.Message + "||" + e.InnerException?.Message);
+            }
+            
         }
 
         /// <summary>
@@ -160,24 +169,33 @@ namespace Xjt.Areas.Manager.Controllers
         [IdentityVerificationAjax]
         public ActionResult DelProductData(int id)
         {
-            var list = CommonHelper.GetJsonModel<List<Product>>("Product");
-            var removeModel = list.Find(a => a.Id == id);
-            var img = removeModel != null ? removeModel.Img : string.Empty;
-            list.RemoveAll(a => a.Id == id);
-
-            CommonHelper.SaveJsonModel(list, "Product");
-
-            if (!string.IsNullOrWhiteSpace(img))
+            try
             {
-                //删除文件
-                var imgPath = HostingEnvironment.MapPath(img);
-                if (System.IO.File.Exists(imgPath))
-                {
-                    System.IO.File.Delete(imgPath);
-                }
-            }
+                Data.Data.ClearDataByType(DataTypeEnum.Product);
+                var list = CommonHelper.GetJsonModel<List<Product>>("Product");
+                var removeModel = list.Find(a => a.Id == id);
+                var img = removeModel != null ? removeModel.Img : string.Empty;
+                list.RemoveAll(a => a.Id == id);
 
-            return CommonHelper.Result("删除成功！");
+                CommonHelper.SaveJsonModel(list, "Product");
+
+                if (!string.IsNullOrWhiteSpace(img))
+                {
+                    //删除文件
+                    var imgPath = HostingEnvironment.MapPath(img);
+                    if (System.IO.File.Exists(imgPath))
+                    {
+                        System.IO.File.Delete(imgPath);
+                    }
+                }
+
+                return CommonHelper.Result("删除成功！");
+            }
+            catch (Exception e)
+            {
+                return CommonHelper.ExceptionResult("删除失败！e:" + e.Message + "||" + e.InnerException?.Message);
+            }
+            
         }
 
         /// <summary>
@@ -190,49 +208,58 @@ namespace Xjt.Areas.Manager.Controllers
         [IdentityVerificationAjax]
         public ActionResult OrderProduct(int id, int type)
         {
-            var list = CommonHelper.GetJsonModel<List<Product>>("Product");
-            var isUpdate = false;
-            if (list != null && list.Count > 0)
+            try
             {
-                var model = list.Find(a => a.Id == id);
-                if (model != null)
+                Data.Data.ClearDataByType(DataTypeEnum.Product);
+                var list = CommonHelper.GetJsonModel<List<Product>>("Product");
+                var isUpdate = false;
+                if (list != null && list.Count > 0)
                 {
-                    Product md = null;
-                    //上移
-                    if (type == 1)
+                    var model = list.Find(a => a.Id == id);
+                    if (model != null)
                     {
-                        var listTemp = list.FindAll(a => a.Order < model.Order).OrderByDescending(a => a.Order)
-                            .ToList();
+                        Product md = null;
+                        //上移
+                        if (type == 1)
+                        {
+                            var listTemp = list.FindAll(a => a.Order < model.Order).OrderByDescending(a => a.Order)
+                                .ToList();
 
-                        md = listTemp.Count > 0 ? listTemp[0] : null;
+                            md = listTemp.Count > 0 ? listTemp[0] : null;
+                        }
+                        else //下移
+                        {
+                            var listTemp = list.FindAll(a => a.Order > model.Order).OrderBy(a => a.Order).ToList();
+
+                            md = listTemp.Count > 0 ? listTemp[0] : null;
+                        }
+
+                        if (md != null)
+                        {
+                            md.Order = md.Order + model.Order;
+                            model.Order = md.Order - model.Order;
+                            list.Find(a => a.Id == md.Id).Order = md.Order - model.Order;
+                            isUpdate = true;
+                        }
+
+                        CommonHelper.SaveJsonModel(list, "Product");
                     }
-                    else //下移
-                    {
-                        var listTemp = list.FindAll(a => a.Order > model.Order).OrderBy(a => a.Order).ToList();
+                }
 
-                        md = listTemp.Count > 0 ? listTemp[0] : null;
-                    }
-
-                    if (md != null)
-                    {
-                        md.Order = md.Order + model.Order;
-                        model.Order = md.Order - model.Order;
-                        list.Find(a => a.Id == md.Id).Order = md.Order - model.Order;
-                        isUpdate = true;
-                    }
-
-                    CommonHelper.SaveJsonModel(list, "Product");
+                if (isUpdate)
+                {
+                    return CommonHelper.Result("操作成功");
+                }
+                else
+                {
+                    return CommonHelper.Result("未操作");
                 }
             }
-
-            if (isUpdate)
+            catch (Exception e)
             {
-                return CommonHelper.Result("操作成功");
+                return CommonHelper.ExceptionResult("删除失败！e:" + e.Message + "||" + e.InnerException?.Message);
             }
-            else
-            {
-                return CommonHelper.Result("未操作");
-            }
+            
         }
 
         [HttpPost]
@@ -283,7 +310,7 @@ namespace Xjt.Areas.Manager.Controllers
         {
             try
             {
-
+                Data.Data.ClearDataByType(DataTypeEnum.Banner);
                 var maxSizeSetting = ConfigurationManager.AppSettings["BannerImgMaxLength"];
                 var maxSize = 0;
                 maxSize = maxSizeSetting == null ? 5120000 : TryConvertUtil.ToInt(maxSizeSetting.ToStringEx());
@@ -343,7 +370,7 @@ namespace Xjt.Areas.Manager.Controllers
             {
                 return CommonHelper.ExceptionResult("参数有误");
             }
-
+            Data.Data.ClearDataByType(DataTypeEnum.Other);
             CommonHelper.SaveJsonModel(model, "Other");
             return CommonHelper.Result("更新成功！");
         }
