@@ -325,3 +325,8 @@ ModelManifest.xml
 /Xjt/obj/Debug/Xjt.dll
 /Xjt/obj/Debug/Xjt.pdb
 /Xjt/Data/User.config
+/Xjt/Data/Banner.config
+/Xjt/Data/Data.cs
+/Xjt/Data/Other.config
+/Xjt/Data/Product.config
+/Xjt/Data/User.config

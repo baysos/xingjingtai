@@ -73,6 +73,10 @@ namespace Xjt.Areas.Manager.Controllers
                 user.Pass = p;
                 CommonHelper.SaveJsonModel(userList, "User");
 
+                if (CommonHelper.SignDic.ContainsKey(name))
+                {
+                    CommonHelper.SignDic.Remove(name);
+                }
                 return CommonHelper.Result("修改成功！");
             }
 
