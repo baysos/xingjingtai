@@ -16,11 +16,6 @@ namespace Xjt.Areas.Manager.Controllers
 
         #region 用户相关
 
-        public ActionResult Test()
-        {
-            return View();
-        }
-
         public ActionResult Login(string name, string pass)
         {
             return View();
@@ -71,12 +66,14 @@ namespace Xjt.Areas.Manager.Controllers
                 var p = SecurityHelper.CreateMd5Str(oldPass + ConstValue.PassSalt);
                 if (user.Pass != p)
                 {
-                    return CommonHelper.ExceptionResult("用户名或密码错误");
+                    return CommonHelper.ExceptionResult("原密码验证错误");
                 }
 
                 p = SecurityHelper.CreateMd5Str(newPass + ConstValue.PassSalt);
                 user.Pass = p;
                 CommonHelper.SaveJsonModel(userList, "User");
+
+                return CommonHelper.Result("修改成功！");
             }
 
             return CommonHelper.ExceptionResult("用户数据有误！");

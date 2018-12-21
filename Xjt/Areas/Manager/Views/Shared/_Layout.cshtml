@@ -14,18 +14,10 @@
     <link href="~/Style/style.default.css" rel="stylesheet" />
 </head>
 <body>
-
-    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
-    <script src="~/Scripts/popper/popper.min.js"></script>
-    <script src="~/Scripts/tether.min.js"></script>
-    <script src="~/Scripts/jquery.cookie.js"></script>
-    <script src="~/Scripts/jquery.validate.min.js"></script>
-    <script src="~/Scripts/chart.min.js"></script>
-    <script src="~/Scripts/front.js"></script>
     <header class="header">
         <nav class="navbar navbar-expand-lg ">
             <a href="/Manager/data/login" style="margin-left: 18px;">退出</a>&nbsp;&nbsp;
-            <a href="javascript:;" id="user-changepass" data-toggle="modal" data-target="#myModal">修改密码</a>
+            <a href="javascript:;" id="user-changepass">修改密码</a>
         </nav>
     </header>
     <div class="page-content d-flex align-items-stretch">
@@ -36,7 +28,15 @@
                 <li class="@(ViewBag.Tag==3?"active":string.Empty)"> <a href="/manager/data/other?s=@(Request.Params["s"])&n=@(Request.Params["n"])"> <i class="icon-grid"></i>其他设置</a></li>
             </ul>
         </nav>
-
+        <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+        <script src="~/Scripts/popper/popper.min.js"></script>
+        <script src="~/Scripts/tether.min.js"></script>
+        <script src="~/Scripts/jquery.cookie.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/chart.min.js"></script>
+        <script src="~/Scripts/front.js"></script>
+        <script src="~/Scripts/bootstrap.min.js"></script>
+        <script src="~/Scripts/art-dialog.js"></script>
         <script>
             //获取url中的参数
             function getUrlParam(name) {
@@ -53,8 +53,68 @@
             @RenderBody()
         </div>
     </div>
+    <script>
+            $(function () {
+                $('#user-changepass').on('click', function () {
+                    var adlg = dialog({
+                        title: '修改密码',
+                        content: '<table style="line-height:20px;">' +
+                        '<tr><td style="" align="right">原密码：<input type="password" id="oldpass" /></td></tr>' +
+                        '<tr><td>新密码密码：<input type="password" id="newpass" /></td></tr>' +
+                        '<tr><td>重复新密码：<input type="password" id="newpass2" /></td></tr>' +
+                        '</table>',
+                        okValue: '确定',
+                        ok: function () {
+                            var name = getUrlParam('n');
+                            var oldpass = $('#oldpass').val();
+                            var newpass = $('#newpass').val();
+                            var newpass2 = $('#newpass2').val();
+                            if (!oldpass || !newpass || !newpass2) {
+                                alert('请填写完整信息');
+                                return false;
+                            }
+                            if (newpass !== newpass2) {
+                                alert('重复新密码不正确！');
+                                return false;
+                            }
 
+                            this.title('提交中…');
+                            $.ajax({
+                                type: 'post',
+                                url: '/manager/data/changepass?' + getUrlSignParamStr(),
+                                data: {
+                                    'name': name,
+                                    'oldPass': oldpass,
+                                    'newPass': newpass
+                                },
+                                dataType: "json",
+                                success: function (data) {
+                                    if (data.code === 500) {
+                                        alert(data.data);
+                                        this.title('修改密码');
+                                        return;
+                                    }
+                                    if (data.code === 302) {
+                                        alert('权限不足');
+                                        window.location.href = data.data;
+                                        return;
+                                    }
 
-    <script src="~/Scripts/bootstrap.min.js"></script>
+                                    alert(data.data);
+                                    window.location = '/manager/data/login';
+                                }
+                            });
+
+                            return false;
+                        },
+                        cancelValue: '取消',
+                        cancel: function () { }
+                    });
+                    adlg.showModal();
+                });
+            });
+
+    </script>
+
 </body>
 </html>

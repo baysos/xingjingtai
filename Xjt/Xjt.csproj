@@ -163,6 +163,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Image\expand.png" />
+    <Content Include="Scripts\art-dialog.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Data\User.config">
@@ -179,7 +180,6 @@
     <Content Include="Areas\Manager\Views\Data\AddProduct.cshtml" />
     <Content Include="Data\Other.config" />
     <Content Include="Areas\Manager\Views\Data\Other.cshtml" />
-    <Content Include="Areas\Manager\Views\Data\Test.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\chart.min.js" />
     <Content Include="Scripts\front.js" />
