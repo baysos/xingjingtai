@@ -1,43 +1,80 @@
-﻿<!DOCTYPE html>
+﻿@using Xjt.Data
+@{
+    var other = Data.Other;
+    other = other ?? new Other();
+}
+
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+    <title>@ViewBag.Title - 兴晶泰</title>
+
+    <style type="text/css">
+        article, aside, blockquote, body, button, code, dd, details, div, dl, dt, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, hr, input, legend, li, menu, nav, ol, p, pre, section, td, textarea, th, ul { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', 'Source Han Sans SC', 'Noto Sans CJK SC', 'WenQuanYi Micro Hei', sans-serif; }
+        a{ text-decoration-line: none; color: #fff;}
+        body {
+            background-color: #fff;
+        }
+        .main .footer div { color: #fff; }
+        .main .footer .d1 { background-color: #25323d; height: 150px; overflow: hidden; }
+        .main .footer .d1 .content{ margin: 25px auto; width: 1440px; height: 100px;}
+        .main .footer .d1 .content .l1 { height: 100px; width: 955px; float: left; overflow: hidden;  }
+        .main .footer .d1 .content .l1 a{ display: block; float: left; margin: 25px 0 0 52px; text-align: center; }
+        .main .footer .sd { height: 100px; width: 0; float: left; border-right: 1px solid #32424f; box-shadow: 1px 1px 1px #1c2631; }
+        .main .footer .d1 div.b { font-weight: bold; font-size: 18px; }
+        .main .footer .d1 div.e { margin-top: 8px; font-size: 14px; }
+        .main .footer .d1 .content .l2 { height: 100px; overflow: hidden; margin-left: 100px; background: url('/image/default/special-plane.png') no-repeat 100px 30px; }
+        .main .footer .d1 .content .l2 div{ font-weight: bold; font-size: 18px; margin-left: 160px;}
+        .main .footer .d2 { background-color: #1c2631; text-align: center; height: 50px; line-height: 50px; font-size: 14px; }
+    </style>
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
 </head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("应用程序名称", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+    <div class="main">
+        @RenderBody()
+        <div class="footer">
+            <div class="d1">
+                <div class="content">
+                    <div class="l1">
+                        <a href="" style="margin-left: 310px">
+                            <div class="b">首页</div>
+                            <div class="e">Home</div>
+                        </a>
+                        <a href="">
+                            <div class="b">产品中心</div>
+                            <div class="e">Product</div>
+                        </a>
+                        <a href="">
+                            <div class="b">行业应用</div>
+                            <div class="e">Application</div>
+                        </a>
+                        <a href="">
+                            <div class="b">加入我们</div>
+                            <div class="e">Join us</div>
+                        </a>
+                        <a href="">
+                            <div class="b">联系我们</div>
+                            <div class="e">Contact us</div>
+                        </a>
+                    </div>
+                    <div class="sd">&nbsp;</div>
+                    <div class="l2">
+                        <div style="margin-top: 25px;">商务合作请咨询：</div>
+                        <div>@other.Phone</div>
+                    </div>
+                </div>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("主页", "Index", "Home", new { area = "" }, null)</li>
-                    <li>@Html.ActionLink("API", "Index", "Help", new { area = "" }, null)</li>
-                </ul>
+            
+            <div class="d2">
+                ©Copyright 2019 深圳市兴晶泰科技有限公司 版权所有
             </div>
         </div>
     </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - 我的 ASP.NET 应用程序</p>
-        </footer>
-    </div>
+    <script>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+    </script>
 </body>
 </html>

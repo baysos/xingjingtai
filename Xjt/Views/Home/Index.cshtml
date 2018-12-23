@@ -1,28 +1,125 @@
-﻿@{
-    
+﻿@using Xjt.Data
+@{
+    var productList = Data.ProductList;
+    productList = productList ?? new List<Product>();
+    productList = productList.OrderBy(a => a.Order).ToList();
 }
+<style>
+    .main .product { height: 317px; overflow: hidden; background-color: #e9e9e9; padding-top: 23px; }
+    .main .product .ct { width: 1440px; height: 296px; overflow: hidden; margin: 0 auto; position: relative; }
+    .main .product .ct ul { display: block; width: 2000px; height: 296px; overflow: hidden; position: absolute; left: 0; top: 0; }
+    .main .product .ct ul li.img { display: block; width: 321px; height: 276px; padding: 10px; overflow: hidden; background-color: #fff; margin-right: 22px; float: left; }
+    .main .product .ct ul li.img img { width: 321px; height: 276px; }
+    .main .introduce { overflow: hidden; background-color: #fff; }
+    .main .introduce .ct { width: 1440px; margin: 0 auto; }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS, and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    .main .introduce .ct .title { height: 70px; width: 1440px; border-bottom: 1px dashed #ff5a00; }
+    .main .introduce .ct .lg { position: absolute; z-index: 10; background-color: #fff; width: 300px; height: 45px; line-height: 43px; overflow: hidden; left: 50%; top: 48px; margin-left: -150px; text-align: center; font-size: 24px; font-weight: bold; }
+    .main .introduce .ct .lg span { display: block; float: left; margin-left: 60px; color: #3c3c3c; }
+    .main .introduce .ct .lg span.i1 { margin-left: 66px; }
+    .main .introduce .ct .lg span.i2 { margin-left: 30px; }
+
+    .main .introduce .ct .tt { position: relative; }
+    .main .introduce .ct .l2 { display: block; height: 598px; border: 1px solid #eeeeee; margin-top: 53px; overflow: hidden; }
+
+    .main .introduce .ct .l2 div { float: left; }
+    .main .introduce .ct .l2 div.l { width: 400px; overflow: hidden; }
+    .main .introduce .ct .l2 div.l div { height: 200px; overflow: hidden; }
+    .main .introduce .ct .l2 div.l img { border: 0; margin: 0; padding: 0 }
+    .main .introduce .ct .l2 div.r { width: 1038px; overflow: hidden; }
+
+    .main .introduce .ct .l4 { margin-top: 51px; overflow: hidden; }
+    .main .introduce .ct .l4 i1{}
+</style>
+
+@{ Html.RenderPartial("Header");}
+<div class="product">
+    <div class="ct">
+        <ul>
+            @foreach (var product in productList)
+            {
+                <li class="img">
+                    <a href=""><img src="@product.Img" title="@product.Name" alt="@product.Name" /></a>
+                </li>
+            }
+        </ul>
+    </div>
 </div>
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>ASP.NET Web API is a framework that makes it easy to build HTTP services that reach
-        a broad range of clients, including browsers and mobile devices. ASP.NET Web API
-        is an ideal platform for building RESTful applications on the .NET Framework.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301870">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301871">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301872">Learn more &raquo;</a></p>
+<div class="introduce">
+    <div class="ct">
+        <div class="l1 tt">
+            <div class="lg">
+                <span class="i1"><img src="/Image/Default/b-hyal.png" /></span>
+                <span class="i2">行业案例</span>
+            </div>
+            <div class="title">
+
+            </div>
+        </div>
+        <a class="l2" href="">
+            <div class="l">
+                <div><img src="~/Image/Default/figure05.png" /></div>
+                <div><img src="~/Image/Default/figure06.png" /></div>
+                <div><img src="~/Image/Default/figure07.png" /></div>
+            </div>
+            <div class="r">
+                <img src="~/Image/Default/figure08.png" />
+            </div>
+        </a>
+        <div class="l3 tt">
+            <div class="lg">
+                <span class="i1"><img src="/Image/Default/b-cpjj.png" /></span>
+                <span class="i2">产品简介</span>
+            </div>
+            <div class="title">
+
+            </div>
+        </div>
+        <div class="l4">
+            <div class="i1"></div>
+            <div class="i2"></div>
+        </div>
     </div>
 </div>
+
+<script>
+    $(function () {
+        var oul = $('.ct ul');
+        var oulHtml = oul.html();
+        oul.html(oulHtml + oulHtml);
+        var timeId = null;
+
+        var ali = $('.ct ul li');
+        var aliWidth = ali.eq(0).width() + 42;
+        var aliSize = ali.length;
+        var ulWidth = aliWidth * aliSize;
+        oul.width(ulWidth);
+        var ulp = -ulWidth / 2;
+        ulp = ulp % 2 !== 0 ? ulp + 1 : ulp;
+        var speed = -2;
+
+        function slider() {
+
+            if (speed < 0) {
+                var olc = oul.css('left');
+                if (olc == ulp + 'px') {
+                    oul.css('left', 0);
+                }
+                oul.css('left', '+=' + speed + 'px');
+            }
+        }
+
+        // setInterval()函数的作用是：每隔一段时间，执行该函数里的代码
+        timeId = setInterval(slider, 30);
+
+        $('.product .ct').on('mouseover', function () {
+            // clearInterval()函数的作用是用来清除定时器
+            clearInterval(timeId);
+        });
+
+        $('.product .ct').on('mouseout', function () {
+            timeId = setInterval(slider, 30);
+        });
+
+    });
+</script>

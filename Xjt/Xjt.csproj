@@ -162,6 +162,23 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Image\Default\figure01.png" />
+    <Content Include="Image\Default\figure02.png" />
+    <Content Include="Image\Default\figure03.png" />
+    <Content Include="Image\Default\figure04.png" />
+    <Content Include="Image\Default\figure05.png" />
+    <Content Include="Image\Default\figure06.png" />
+    <Content Include="Image\Default\figure07.png" />
+    <Content Include="Image\Default\figure08.png" />
+    <Content Include="Image\Default\figure09.png" />
+    <Content Include="Image\Default\figure10.png" />
+    <Content Include="Image\Default\figure11.png" />
+    <Content Include="Image\Default\logo.png" />
+    <Content Include="Image\Default\special-plane.png" />
+    <Content Include="Image\Default\b-cpjj.png" />
+    <Content Include="Image\Default\b-dxal.png" />
+    <Content Include="Image\Default\b-hyyy.png" />
+    <Content Include="Image\Default\b-hyal.png" />
     <Content Include="Image\expand.png" />
     <Content Include="Scripts\art-dialog.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -259,6 +276,8 @@
     <Content Include="Style\font-awesome-4.7.0\scss\_screen-reader.scss" />
     <Content Include="Style\font-awesome-4.7.0\scss\_stacked.scss" />
     <Content Include="Style\font-awesome-4.7.0\scss\_variables.scss" />
+    <Content Include="Views\Shared\Header.cshtml" />
+    <Content Include="Views\Shared\HeaderContent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
