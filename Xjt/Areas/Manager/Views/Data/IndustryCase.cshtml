@@ -1,0 +1,82 @@
+﻿@using Xjt.Common
+@using Xjt.Data
+
+@{
+    ViewBag.Title = "行业案例设置";
+    ViewBag.Tag = 6;
+    var industryCaseList = ViewBag.List as List<IndustryCase>;
+    industryCaseList = industryCaseList ?? new List<IndustryCase>();
+    industryCaseList = industryCaseList.OrderBy(a => a.Id).ToList();
+}
+
+<button type="button" class="btn btn-primary" id="add-product">添加</button>
+<div class="content-inner chart-cont">
+
+    <div class="row">
+        <table class="table table-hover" id="table-data">
+            <thead>
+                <tr class="bg-info text-white">
+                    <th>序号</th>
+                    <th>详情摘要</th>
+                    <th>图片</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @*<tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                    </tr>*@
+                @if (industryCaseList != null && industryCaseList.Count > 0)
+                {
+                    foreach (var prd in industryCaseList)
+                    {
+                        <tr>
+                            <th scope="row">@prd.Id</th>
+                            <td>@(prd.ContentSummary.Length>50?prd.ContentSummary.Substring(0, 50):prd.ContentSummary)</td>
+                            <td><img src="@prd.Img" width="115" height="100" /></td>
+                            <td>
+                                <a href="/manager/data/addindustrycase?s=@Request.Params["s"].ToStringEx()&n=@Request.Params["n"].ToStringEx()&id=@prd.Id">编辑</a>&nbsp;&nbsp;
+                                <a href="javascript:;" onclick="delindustrycase(@prd.Id)">删除</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#add-product').on('click', function () {
+            window.location.href = "/manager/data/addindustrycase?" + getUrlSignParamStr();
+        });
+    });
+
+    function delindustrycase(id) {
+        if (window.confirm("确定删除该条数据？")) {
+            $.ajax({
+                type: 'post',
+                url: '/manager/data/delindustrycasedata?' + getUrlSignParamStr(),
+                data: {
+                    'id': id
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data.code === 500) {
+                        alert(data.data);
+                        return;
+                    }
+                    if (data.code === 302) {
+                        alert('权限不足');
+                        window.location.href = data.data;
+                        return;
+                    }
+
+                    window.location.reload();
+                }
+            });
+        }
+    }
+</script>

@@ -84,7 +84,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="add-product-name" class="col-sm-2 col-form-label">产品图片</label>
+                        <label for="add-product-img" class="col-sm-2 col-form-label">产品图片</label>
                         <div class="col-sm-10">
                             <div id="picker">选择文件</div>
                             <img id="add-product-img" src="@(product!=null?product.Img:string.Empty)" />
@@ -124,7 +124,7 @@
 
         uploader.on('uploadSuccess', function (file) {
             if (file.size > 1 * 1024 * 1000) {
-                alert('上传图片超过1M，禁止上传');
+                alert('上传图片超过1M，请压缩后再上传');
             }
         });
 
@@ -138,9 +138,9 @@
         var editor = new E('#add-product-content');
         // 配置服务器端上传图片地址
         //editor.customConfig.uploadImgServer = '/manager/data/productuploadfile?' + getUrlSignParamStr() + '&t=1';
-        editor.customConfig.uploadImgMaxLength = 1;
-        editor.customConfig.uploadImgMaxSize = 1 * 1024 * 1024;
-        editor.customConfig.uploadImgShowBase64 = true;
+        editor.customConfig.uploadImgMaxLength = 0;
+        editor.customConfig.uploadImgMaxSize = 1;
+        editor.customConfig.uploadImgShowBase64 = false;
         editor.create();
 
         var ct = HtmlUtil.htmlDecode('@(product != null ? product.Content : string.Empty)');

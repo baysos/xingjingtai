@@ -1,0 +1,140 @@
+﻿@using Xjt.Common
+@using Xjt.Data
+
+@{
+    ViewBag.Tag = 6;
+    var id = Request.Params["id"].ToStringEx();
+    IndustryCase industryCase = null;
+    if (string.IsNullOrWhiteSpace(id))
+    {
+        ViewBag.Title = "添加行业案例";
+    }
+    else
+    {
+        ViewBag.Title = "修改行业案例";
+        var list = CommonHelper.GetJsonModel<List<IndustryCase>>("IndustryCase");
+        if (list != null)
+        {
+            industryCase = list.Find(a => a.Id == TryConvertUtil.ToInt(id));
+        }
+    }
+
+}
+@Styles.Render("/Style/form.css")
+@Styles.Render("/scripts/webuploader/webuploader.css")
+@Scripts.Render("/scripts/webuploader/webuploader.min.js")
+@Scripts.Render("/scripts/wEdit/wangEditor.min.js")
+@Scripts.Render("/scripts/htmlutil.js")
+
+<div class="content-inner form-cont">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card form" id="form1" style="padding-top: 16px;">
+                <div class="card-header">
+                    <h3>@(ViewBag.Title)</h3>
+                </div>
+                <br>
+                <form>
+                    <div class="form-group row">
+                        <label for="add-product-img" class="col-sm-2 col-form-label">案例图片</label>
+                        <div class="col-sm-10">
+                            <div id="picker">选择文件</div>
+                            <img id="add-product-img" src="@(industryCase!=null?industryCase.Img:string.Empty)" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="add-product-content" class="col-sm-2 col-form-label">案例介绍</label>
+                        <div class="col-sm-10">
+                            <div id="add-product-content">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-general btn-blue mr-2" id="add-product-add">提交</button>
+                    <button type="button" class="btn btn-general btn-white" id="add-product-cancel">取消</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var pid;
+    $(function () {
+        pid = getUrlParam('id');
+        // 初始化Web Uploader
+        var uploader = WebUploader.create({
+            auto: true,
+            swf: '/scripts/webuploader/Uploader.swf',
+            server: '/manager/data/industrycaseuploadfile?' + getUrlSignParamStr() + '&id=' + pid,
+            pick: '#picker',
+            accept: {
+                title: 'Images',
+                extensions: 'gif,jpg,jpeg,bmp,png',
+                mimeTypes: 'image/*'
+            }
+        });
+
+        uploader.on('uploadSuccess', function (file) {
+            if (file.size > 1 * 1024 * 1000) {
+                alert('上传图片超过1M，请压缩后再上传');
+            }
+        });
+
+        uploader.on('uploadComplete',
+            function (file) {
+                $('#add-product-img').attr('src', '/image/upload/industrycase/' + file.name);
+            });
+
+        //初始化编辑器
+        var E = window.wangEditor;
+        var editor = new E('#add-product-content');
+        // 配置服务器端上传图片地址
+        //editor.customConfig.uploadImgServer = '/manager/data/productuploadfile?' + getUrlSignParamStr() + '&t=1';
+        editor.customConfig.uploadImgMaxLength = 0;
+        editor.customConfig.uploadImgMaxSize = 1;
+        editor.customConfig.uploadImgShowBase64 = false;
+        editor.create();
+
+        var ct = HtmlUtil.htmlDecode('@(industryCase != null ? industryCase.Content : string.Empty)');
+        editor.txt.html(ct);
+
+        //初始化提交
+        $('#add-product-add').on('click',
+            function () {
+                var img = $('#add-product-img').attr('src');
+                var content = editor.txt.html();
+                var summary = editor.txt.text();
+
+                $.ajax({
+                    type: 'post',
+                    url: '/manager/data/updateindustrycasedata?' + getUrlSignParamStr(),
+                    data: {
+                        'id': pid ? pid : null,
+                        'img': img,
+                        'content': content,
+                        'contentsummary': summary
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.code === 500) {
+                            alert(data.data);
+                            return;
+                        }
+                        if (data.code === 302) {
+                            alert('权限不足');
+                            window.location.href = data.data;
+                            return;
+                        }
+
+                        window.location = '/manager/data/industrycase?' + getUrlSignParamStr();
+                    }
+                });
+            });
+
+        //初始化取消
+        $('#add-product-cancel').on('click',
+            function () {
+                window.location.href = '/manager/data/industrycase?' + getUrlSignParamStr();
+            });
+    });
+</script>

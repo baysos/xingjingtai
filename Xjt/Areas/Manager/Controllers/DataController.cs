@@ -118,7 +118,6 @@ namespace Xjt.Areas.Manager.Controllers
 
             try
             {
-                Data.Data.ClearDataByType(DataTypeEnum.Product);
                 var list = CommonHelper.GetJsonModel<List<Product>>("Product");
 
                 //添加
@@ -151,6 +150,7 @@ namespace Xjt.Areas.Manager.Controllers
                     }
                 }
                 CommonHelper.SaveJsonModel(list, "Product");
+                Data.Data.RefreshDataByType(DataTypeEnum.Product);
 
                 return CommonHelper.Result("添加成功！");
             }
@@ -172,7 +172,6 @@ namespace Xjt.Areas.Manager.Controllers
         {
             try
             {
-                Data.Data.ClearDataByType(DataTypeEnum.Product);
                 var list = CommonHelper.GetJsonModel<List<Product>>("Product");
                 var removeModel = list.Find(a => a.Id == id);
                 var img = removeModel != null ? removeModel.Img : string.Empty;
@@ -189,7 +188,7 @@ namespace Xjt.Areas.Manager.Controllers
                         System.IO.File.Delete(imgPath);
                     }
                 }
-
+                Data.Data.RefreshDataByType(DataTypeEnum.Product);
                 return CommonHelper.Result("删除成功！");
             }
             catch (Exception e)
@@ -211,7 +210,6 @@ namespace Xjt.Areas.Manager.Controllers
         {
             try
             {
-                Data.Data.ClearDataByType(DataTypeEnum.Product);
                 var list = CommonHelper.GetJsonModel<List<Product>>("Product");
                 var isUpdate = false;
                 if (list != null && list.Count > 0)
@@ -244,6 +242,7 @@ namespace Xjt.Areas.Manager.Controllers
                         }
 
                         CommonHelper.SaveJsonModel(list, "Product");
+                        Data.Data.RefreshDataByType(DataTypeEnum.Product);
                     }
                 }
 
@@ -311,7 +310,7 @@ namespace Xjt.Areas.Manager.Controllers
         {
             try
             {
-                Data.Data.ClearDataByType(DataTypeEnum.Banner);
+                Data.Data.RefreshDataByType(DataTypeEnum.Banner);
                 var maxSizeSetting = ConfigurationManager.AppSettings["BannerImgMaxLength"];
                 var maxSize = 0;
                 maxSize = maxSizeSetting == null ? 5120000 : TryConvertUtil.ToInt(maxSizeSetting.ToStringEx());
@@ -371,12 +370,194 @@ namespace Xjt.Areas.Manager.Controllers
             {
                 return CommonHelper.ExceptionResult("参数有误");
             }
-            Data.Data.ClearDataByType(DataTypeEnum.Other);
+            Data.Data.RefreshDataByType(DataTypeEnum.Other);
             CommonHelper.SaveJsonModel(model, "Other");
             return CommonHelper.Result("更新成功！");
         }
 
         #endregion
 
+        #region 联系我们，加入我们
+
+        [IdentityVerification]
+        public ActionResult ContactUs()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [IdentityVerificationAjax]
+        [ValidateInput(false)]
+        public ActionResult UpdateContactUsData(string content)
+        {
+            if (string.IsNullOrWhiteSpace(content))
+            {
+                return CommonHelper.ExceptionResult("参数有误");
+            }
+            Data.Data.RefreshDataByType(DataTypeEnum.ContactUs);
+            CommonHelper.SaveJsonModel(content, "ContactUs");
+            return CommonHelper.Result("更新成功！");
+        }
+
+        [IdentityVerification]
+        public ActionResult JoinUs()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [IdentityVerificationAjax]
+        [ValidateInput(false)]
+        public ActionResult UpdateJoinUsData(string content)
+        {
+            if (string.IsNullOrWhiteSpace(content))
+            {
+                return CommonHelper.ExceptionResult("参数有误");
+            }
+            Data.Data.RefreshDataByType(DataTypeEnum.JoinUs);
+            CommonHelper.SaveJsonModel(content, "JoinUs");
+            return CommonHelper.Result("更新成功！");
+        }
+
+        #endregion
+
+        #region 行业案例
+
+        [IdentityVerification]
+        public ActionResult IndustryCase()
+        {
+            var list = CommonHelper.GetJsonModel<List<IndustryCase>>("IndustryCase");
+            ViewBag.List = list?.OrderBy(a => a.Id).ToList();
+            return View();
+        }
+
+        [IdentityVerification]
+        public ActionResult AddIndustryCase()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 添加 修改 行业案例
+        /// </summary>
+        /// <param name="industryCase"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateInput(false)]
+        [IdentityVerificationAjax]
+        public ActionResult UpdateIndustryCaseData(IndustryCase industryCase)
+        {
+            if (industryCase == null)
+            {
+                return CommonHelper.ExceptionResult("参数有误！");
+            }
+
+            try
+            {
+                var list = CommonHelper.GetJsonModel<List<IndustryCase>>("IndustryCase");
+
+                //添加
+                if (industryCase.Id == 0)
+                {
+                    if (list != null && list.Count > 0)
+                    {
+                        list = list.OrderByDescending(a => a.Id).ToList();
+                        var id = list[0].Id + 1;
+                        industryCase.Id = id;
+                    }
+                    else
+                    {
+                        list = new List<IndustryCase>();
+                        industryCase.Id = 1;
+                    }
+
+                    list.Add(industryCase);
+                }
+                else //修改
+                {
+                    var pdt = list.Find(a => a.Id == industryCase.Id);
+                    if (pdt != null)
+                    {
+                        list.RemoveAll(a => a.Id == industryCase.Id);
+                        list.Add(industryCase);
+                    }
+                }
+                CommonHelper.SaveJsonModel(list, "IndustryCase");
+                Data.Data.RefreshDataByType(DataTypeEnum.IndustryCase);
+                return CommonHelper.Result("添加成功！");
+            }
+            catch (Exception e)
+            {
+                return CommonHelper.ExceptionResult("添加失败！e:" + e.Message + "||" + e.InnerException?.Message);
+            }
+
+        }
+
+        /// <summary>
+        /// 删除行业案例信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [IdentityVerificationAjax]
+        public ActionResult DelIndustryCaseData(int id)
+        {
+            try
+            {
+                Data.Data.RefreshDataByType(DataTypeEnum.IndustryCase);
+                var list = CommonHelper.GetJsonModel<List<IndustryCase>>("IndustryCase");
+                var removeModel = list.Find(a => a.Id == id);
+                var img = removeModel != null ? removeModel.Img : string.Empty;
+                list.RemoveAll(a => a.Id == id);
+
+                CommonHelper.SaveJsonModel(list, "IndustryCase");
+
+                if (!string.IsNullOrWhiteSpace(img))
+                {
+                    //删除文件
+                    var imgPath = HostingEnvironment.MapPath(img);
+                    if (System.IO.File.Exists(imgPath))
+                    {
+                        System.IO.File.Delete(imgPath);
+                    }
+                }
+
+                return CommonHelper.Result("删除成功！");
+            }
+            catch (Exception e)
+            {
+                return CommonHelper.ExceptionResult("删除失败！e:" + e.Message + "||" + e.InnerException?.Message);
+            }
+
+        }
+
+        [HttpPost]
+        [IdentityVerificationAjax]
+        public ActionResult IndustryCaseUploadFile(HttpPostedFileBase file)
+        {
+            try
+            {
+                var pt = "/Image/UpLoad/IndustryCase";
+                var maxSize = 1 * 1024 * 1000;
+                if (file.ContentLength > maxSize)
+                {
+                    return CommonHelper.ExceptionResult(new { msg = "上传失败" });
+                }
+
+                var fileName = file.FileName;
+                var filePath = Server.MapPath(pt);
+                var path = Path.Combine(filePath, fileName);
+                file.SaveAs(path);
+
+                return CommonHelper.Result(new { msg = "上传成功", path = path });
+            }
+            catch (Exception e)
+            {
+                return CommonHelper.ExceptionResult(new { msg = "上传失败" });
+            }
+
+        }
+
+        #endregion
     }
 }

@@ -197,6 +197,13 @@
     <Content Include="Areas\Manager\Views\Data\AddProduct.cshtml" />
     <Content Include="Data\Other.config" />
     <Content Include="Areas\Manager\Views\Data\Other.cshtml" />
+    <Content Include="Areas\Manager\Views\Data\ContactUs.cshtml" />
+    <Content Include="Areas\Manager\Views\Data\JoinUs.cshtml" />
+    <Content Include="Data\ContactUs.config" />
+    <Content Include="Data\JoinUs.config" />
+    <Content Include="Data\IndustryCase.config" />
+    <Content Include="Areas\Manager\Views\Data\IndustryCase.cshtml" />
+    <Content Include="Areas\Manager\Views\Data\AddIndustryCase.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\chart.min.js" />
     <Content Include="Scripts\front.js" />
@@ -282,6 +289,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Image\UpLoad\Banner\" />
+    <Folder Include="Image\UpLoad\IndustryCase\" />
     <Folder Include="Service\" />
   </ItemGroup>
   <ItemGroup>

@@ -48,6 +48,12 @@ namespace Xjt.Common
                     content = content.Replace("\\r\\n", string.Empty);
                     if (!string.IsNullOrWhiteSpace(content))
                     {
+                        var type = typeof(T);
+                        if (type.Name.ToLower() == "string")
+                        {
+                            value = (T) (object) content;
+                        }
+
                         return JsonConvert.DeserializeObject<T>(content);
                     }
                 }

@@ -17,7 +17,16 @@ namespace Xjt.Data
         private static Other _other;
         public static Other Other => _other ?? (_other = CommonHelper.GetJsonModel<Other>("Other"));
 
-        public static void ClearDataByType(DataTypeEnum dt)
+        private static string _contactUs;
+        public static string ContactUs => _contactUs ?? (_contactUs = CommonHelper.GetJsonModel<string>("ContactUs"));
+
+        private static string _joinUs;
+        public static string JoinUs => _joinUs ?? (_joinUs = CommonHelper.GetJsonModel<string>("JoinUs"));
+
+        private static IndustryCase _industryCase;
+        public static IndustryCase IndustryCase => _industryCase ?? (_industryCase = CommonHelper.GetJsonModel<IndustryCase>("IndustryCase"));
+
+        public static void RefreshDataByType(DataTypeEnum dt)
         {
             switch (dt)
             {
@@ -29,6 +38,15 @@ namespace Xjt.Data
                     break;
                 case DataTypeEnum.Other:
                     _other = null;
+                    break;
+                case DataTypeEnum.ContactUs:
+                    _contactUs = null;
+                    break;
+                case DataTypeEnum.JoinUs:
+                    _joinUs = null;
+                    break;
+                case DataTypeEnum.IndustryCase:
+                    _joinUs = null;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(dt), dt, null);
@@ -114,11 +132,28 @@ namespace Xjt.Data
         public string Phone { get; set; }
     }
 
+    /// <summary>
+    /// 行业案例
+    /// </summary>
+    public class IndustryCase
+    {
+        public int Id { get; set; }
+
+        public string Img { get; set; }
+
+        public string Content { get; set; }
+
+        public string ContentSummary { get; set; }
+    }
+
     public enum DataTypeEnum
     {
         User = 1,
         Banner = 2,
         Product = 3,
-        Other = 4
+        Other = 4,
+        ContactUs = 5,
+        JoinUs = 6,
+        IndustryCase = 7,
     }
 }

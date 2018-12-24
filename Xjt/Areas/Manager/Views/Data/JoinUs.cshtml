@@ -1,0 +1,80 @@
+﻿@using Xjt.Data
+
+@{
+    ViewBag.Title = "更新加入我们";
+    var joinUs = Data.JoinUs;
+    joinUs = joinUs ?? string.Empty;
+    ViewBag.Tag = 5;
+}
+
+@Styles.Render("/Style/form.css")
+@Scripts.Render("/scripts/wEdit/wangEditor.min.js")
+@Scripts.Render("/scripts/htmlutil.js")
+
+<div class="content-inner form-cont">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card form" id="form1" style="padding-top: 16px;">
+                <div class="card-header">
+                    <h3>加入我们</h3>
+                </div>
+                <br>
+                <form>
+                    <div class="form-group row">
+                        <label for="joinUs-content" class="col-sm-2 col-form-label">内容</label>
+                        <div class="col-sm-10">
+                            <div id="joinUs-content">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-general btn-blue mr-2" id="joinUs-add">提交</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+
+        //初始化编辑器
+        var E = window.wangEditor;
+        var editor = new E('#joinUs-content');
+        // 配置服务器端上传图片地址
+        //editor.customConfig.uploadImgServer = '/manager/data/productuploadfile?' + getUrlSignParamStr() + '&t=1';
+        editor.customConfig.uploadImgShowBase64 = true;
+        editor.create();
+
+        var ct = HtmlUtil.htmlDecode('@(joinUs)');
+        editor.txt.html(ct);
+
+        //初始化提交
+        $('#joinUs-add').on('click',
+            function () {
+                var content = editor.txt.html();
+
+                $.ajax({
+                    type: 'post',
+                    url: '/manager/data/UpdateJoinUsData?' + getUrlSignParamStr(),
+                    data: {
+                        'content': content
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.code === 500) {
+                            alert(data.data);
+                            return;
+                        }
+                        if (data.code === 302) {
+                            alert('权限不足');
+                            window.location.href = data.data;
+                            return;
+                        }
+                        alert('更新成功');
+                        window.location.reload();
+                    }
+                });
+            });
+
+    });
+</script>

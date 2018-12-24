@@ -25,6 +25,9 @@
             <ul class="list-unstyled">
                 <li class="@(ViewBag.Tag==1?"active":string.Empty)"> <a href="/manager/data/index?s=@(Request.Params["s"])&n=@(Request.Params["n"])"> <i class="icon-grid"></i>Banner设置</a></li>
                 <li class="@(ViewBag.Tag==2?"active":string.Empty)"> <a href="/manager/data/product?s=@(Request.Params["s"])&n=@(Request.Params["n"])"> <i class="icon-grid"></i>主推产品设置</a></li>
+                <li class="@(ViewBag.Tag==6?"active":string.Empty)"> <a href="/manager/data/industrycase?s=@(Request.Params["s"])&n=@(Request.Params["n"])"> <i class="icon-grid"></i>行业案例设置</a></li>
+                <li class="@(ViewBag.Tag==4?"active":string.Empty)"> <a href="/manager/data/contactus?s=@(Request.Params["s"])&n=@(Request.Params["n"])"> <i class="icon-grid"></i>联系我们设置</a></li>
+                <li class="@(ViewBag.Tag==5?"active":string.Empty)"> <a href="/manager/data/joinus?s=@(Request.Params["s"])&n=@(Request.Params["n"])"> <i class="icon-grid"></i>加入我们设置</a></li>
                 <li class="@(ViewBag.Tag==3?"active":string.Empty)"> <a href="/manager/data/other?s=@(Request.Params["s"])&n=@(Request.Params["n"])"> <i class="icon-grid"></i>其他设置</a></li>
             </ul>
         </nav>
