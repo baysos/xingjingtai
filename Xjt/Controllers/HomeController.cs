@@ -14,5 +14,30 @@ namespace Xjt.Controllers
 
             return View();
         }
+
+        public ActionResult IndustryCase()
+        {
+            return View();
+        }
+
+        public ActionResult JoinUs()
+        {
+            return View();
+        }
+
+        public ActionResult ContactUs()
+        {
+            return View();
+        }
+
+        public ActionResult ProductCenter()
+        {
+            return View();
+        }
+
+        public ActionResult ProductDetail()
+        {
+            return View();
+        }
     }
 }

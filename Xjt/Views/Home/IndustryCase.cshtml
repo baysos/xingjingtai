@@ -1,0 +1,86 @@
+﻿@using Xjt.Data
+
+@{
+    ViewBag.Title = "行业应用";
+    ViewBag.Tag = 3;
+    var industryCase = Data.IndustryCase;
+    industryCase = industryCase ?? new List<IndustryCase>();
+    industryCase = industryCase.OrderBy(a => a.Id).ToList();
+    var i = 0;
+}
+
+@{ Html.RenderPartial("Header");}
+
+<style>
+    .main .case-content { background-color: #e9e9e9; }
+    .main .case-content .ct { width: 1440px; margin: 0 auto; overflow: hidden; }
+
+    .main .ct .title { height: 60px; width: 1440px; border-bottom: 1px dashed #ff5a00; }
+    .main .ct .lg { position: absolute; z-index: 10; background-color: #fff; width: 300px; height: 45px; line-height: 43px; overflow: hidden; left: 50%; top: 38px; margin-left: -150px; text-align: center; font-size: 24px; font-weight: bold; background-color: #e9e9e9; }
+    .main .ct .lg span { display: block; float: left; margin-left: 60px; color: #3c3c3c; }
+    .main .ct .lg span.i1 { margin-left: 66px; }
+    .main .ct .lg span.i2 { margin-left: 30px; }
+    .main .ct .tt { position: relative; }
+
+    .main .case-content .ct .l2 { height: 296px; margin-top: 62px; }
+    .main .case-content .ct .l2 div { height: 276px; width: 323px; overflow: hidden; margin-right: 22px; background-color: #fff; float: left; padding: 10px; }
+    .main .case-content .ct .l2 div img { height: 276px; width: 323px; }
+
+    .main .case-content .ct .l4 { margin-top: 24px; overflow: hidden; }
+    .main .case-content .ct .l4 .ict { margin-top: 20px; padding: 10px; height: 480px; background-color: #fff; overflow: hidden; }
+    .main .case-content .ct .l4 .ict .i1 { float: left; width: 428px; height: 420px; margin: 30px 0 30px 40px; word-wrap: break-word; word-break: break-all; overflow: hidden; }
+    .main .case-content .ct .l4 .ict .i2 { float: right; height: 480px; width: 906px; padding: 0; overflow: hidden; }
+    .main .case-content .ct .l4 .ict .i2 img { height: 480px; width: 906px; }
+
+    .main .case-content .ct .l5{ margin-top: 60px;}
+</style>
+
+<div class="case-content">
+    <div class="ct">
+        <div class="l1 tt">
+            <div class="lg">
+                <span class="i1"><img src="/Image/Default/b-hyyy.png" /></span>
+                <span class="i2">行业应用</span>
+            </div>
+            <div class="title">
+
+            </div>
+        </div>
+        <div class="l2">
+            @foreach (var ic in industryCase)
+            {
+                if (i == 3)
+                {
+                    <div style="margin-right: 0;"><img src="@ic.Img" /></div>
+                }
+                else
+                {
+                    <div><img src="@ic.Img" /></div>
+                }
+
+                i++;
+            }
+        </div>
+        <div class="l3 tt">
+            <div class="lg">
+                <span class="i1"><img src="/Image/Default/b-dxal.png" /></span>
+                <span class="i2">典型案例</span>
+            </div>
+            <div class="title">
+
+            </div>
+        </div>
+        <div class="l4">
+            @foreach (var ic in industryCase)
+            {
+                <div class="ict">
+                    <div class="i1">@Html.Raw(ic.Content)</div>
+                    <div class="i2"><img src="@ic.Img" /></div>
+                </div>
+            }
+        </div>
+        <div class="l5">
+
+        </div>
+    </div>
+</div>

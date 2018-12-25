@@ -16,6 +16,7 @@
     .main .header .nav .content .l1 a{ height: 75px; width: 100px; display: block;float: left; color: #fff; margin: 0 0 0 30px; text-align: center; padding-top: 25px;}
     .main .header .nav .content .l1 a:hover{ background-color: #1f314c;}
     .main .header .nav .content .l1 a:hover .b{ color: #ff5a00;}
+    .main .header .nav .content .l1 .ahover{background-color: #1f314c; }
     .main .header .nav .content .l1 div.b { font-weight: bold; font-size: 18px; }
     .main .header .nav .content .l1 div.e { margin-top: 8px; font-size: 14px; }
     .main .header .nav .content .l2{ color: #fff; height: 100px; width: 280px; float: left; background: url('/image/default/special-plane.png') no-repeat 45px 30px; font-size: 18px; font-weight: bold;}
@@ -29,23 +30,23 @@
     <div class="nav">
         <div class="content">
             <div class="l1">
-                <a href="/" style="margin-left: 268px">
+                <a href="/" style="margin-left: 268px" class="@(ViewBag.Tag==1? "ahover" : string.Empty)">
                     <div class="b">首页</div>
                     <div class="e">Home</div>
                 </a>
-                <a href="">
+                <a href="/productcenter" class="@(ViewBag.Tag==2? "ahover" : string.Empty)">
                     <div class="b">产品中心</div>
                     <div class="e">Product</div>
                 </a>
-                <a href="">
+                <a href="/industrycase" class="@(ViewBag.Tag==3? "ahover" : string.Empty)">
                     <div class="b">行业应用</div>
                     <div class="e">Application</div>
                 </a>
-                <a href="">
+                <a href="/joinus" class="@(ViewBag.Tag==4? "ahover" : string.Empty)">
                     <div class="b">加入我们</div>
                     <div class="e">Join us</div>
                 </a>
-                <a href="">
+                <a href="/contactus" class="@(ViewBag.Tag==5? "ahover" : string.Empty)">
                     <div class="b">联系我们</div>
                     <div class="e">Contact us</div>
                 </a>
@@ -55,7 +56,7 @@
                 <div>@other.Phone</div>
             </div>
         </div>
-        
+
     </div>
     <div class="slogan">
         <div class="l1">追求卓越，超越平凡</div>
@@ -63,6 +64,4 @@
     </div>
 </div>
 <script>
-    $(function() {
-    });
 </script>

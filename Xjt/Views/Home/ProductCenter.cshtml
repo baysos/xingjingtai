@@ -1,0 +1,311 @@
+﻿
+@{
+    ViewBag.Title = "产品中心";
+    ViewBag.Tag = 2;
+}
+
+@{ Html.RenderPartial("Header");}
+<style>
+    .main .hidden { display: none; }
+    .main .ct { width: 1440px; margin: 0 auto; margin-top: 20px; overflow: hidden; }
+    .main .ct .l1 { border-bottom: 2px solid #3289ff; width: 1440px; height: 62px; overflow: hidden; }
+    .main .ct .l1 .td { cursor: pointer; height: 62px; line-height: 62px; float: left; text-align: center; width: 238px; border-left: 2px solid #bdc5d1; border-top: 2px solid #bdc5d1; font-weight: bold; font-size: 16px; background-color: #f3f7ff; }
+    .main .ct .l1 .td.checked { background-color: #3289ff; color: #fff; }
+    .main .ct .l2 { width: 1440px; margin: 40px auto 60px auto; overflow: hidden; }
+    .main .ct .l2 table { width: 1436px; margin: 0 auto; border-collapse: collapse; }
+    .main .ct .l2 table th { height: 42px; line-height: 42px; text-align: center; background-color: #f3f7ff; }
+    .main .ct .l2 table td { height: 86px; font-weight: bold; text-align: center; }
+    .main .ct .l2 table, .main .ct .l2 table th, .main .ct .l2 table td { border: 2px solid #e1e1e1; }
+
+    .main .ct .l2 table.table1 th { width: 158px; }
+</style>
+<div class="ct">
+    <div class="l1">
+        <div class="td checked" style="border-top-left-radius: 12px;" data-id="1">PSR/PWM</div>
+        <div class="td" data-id="2">同步整流</div>
+        <div class="td" data-id="3">充电管理</div>
+        <div class="td" data-id="4">半桥电源管理</div>
+        <div class="td" data-id="5">移动电源</div>
+        <div class="td" data-id="6" style="border-right: 2px solid #bdc5d1; width: 236px; border-top-right-radius: 12px;">霍尔传感器</div>
+    </div>
+    <div class="l2">
+        <table id="table1" class="table1">
+            <tr>
+                <th>型号</th>
+                <th>工作模式</th>
+                <th>能效</th>
+                <th>功率</th>
+                <th>待机功耗</th>
+                <th>功率管</th>
+                <th>线补</th>
+                <th>应用</th>
+                <th>封装</th>
+            </tr>
+        </table>
+        <table id="table2" class="table1 hidden">
+            <tr>
+                <th>型号</th>
+                <th>耐压</th>
+                <th>导通内阻</th>
+                <th>工作电压</th>
+                <th>输出功率</th>
+                <th>工作模式</th>
+                <th>应用</th>
+                <th>封装</th>
+            </tr>
+        </table>
+        <table id="table3" class="table1 hidden">
+            <tr>
+                <th>型号</th>
+                <th>内置基准</th>
+                <th>工作电压</th>
+                <th>输出电流</th>
+                <th>工作模式</th>
+                <th>应用</th>
+                <th>封装</th>
+            </tr>
+        </table>
+        <table id="table4" class="table1 hidden">
+            <tr>
+                <th>型号</th>
+                <th>内置基准</th>
+                <th>工作电压</th>
+                <th>精准精度</th>
+                <th>工作模式</th>
+                <th>应用</th>
+                <th>封装</th>
+            </tr>
+        </table>
+        <table id="table5" class="table1 hidden">
+            <tr>
+                <th>型号</th>
+                <th>放电模式</th>
+                <th>充电模式</th>
+                <th>充电电流</th>
+                <th>放电电流</th>
+                <th>待机电流</th>
+                <th>封装</th>
+            </tr>
+        </table>
+        <table id="table6" class="table1 hidden">
+            <tr>
+                <th>型号</th>
+                <th>工作电压</th>
+                <th>驱动电源</th>
+                <th>应用</th>
+                <th>工作温度</th>
+                <th>待定</th>
+                <th>封装</th>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<script>
+
+    $(function () {
+        var data1 = [
+            { "xh": "MT3602A", "gzms": "PSR", "nx": "6", "gl": "3W", "djgh": "75mW", "glg": "BJT", "xb": "是", "yy": "充电器|LED照明|适配器", "fz": "SOP7" },
+            { "xh": "MT3602CA", "gzms": "PSR", "nx": "6", "gl": "5W", "djgh": "75mW", "glg": "BJT", "xb": "是", "yy": "充电器|LED照明|适配器", "fz": "SOP7" },
+            { "xh": "MT3602C", "gzms": "PSR", "nx": "6", "gl": "6W", "djgh": "75mW", "glg": "BJT", "xb": "是", "yy": "充电器|LED照明|适配器", "fz": "SOP7" },
+            { "xh": "MT3602F", "gzms": "PSR", "nx": "6", "gl": "6W", "djgh": "75mW", "glg": "BJT", "xb": "是", "yy": "充电器|LED照明|适配器", "fz": "SOP7" },
+            { "xh": "MT3612A", "gzms": "PSR", "nx": "6", "gl": "10W", "djgh": "75mW", "glg": "BJT", "xb": "是", "yy": "充电器|LED照明|适配器", "fz": "SOP7" },
+            { "xh": "MT3612B", "gzms": "PSR", "nx": "6", "gl": "12W", "djgh": "75mW", "glg": "BJT", "xb": "是", "yy": "充电器|LED照明|适配器", "fz": "SOP7" },
+            { "xh": "MT3601C", "gzms": "PSR", "nx": "6", "gl": "6W", "djgh": "75mW", "glg": "BJT", "xb": "是", "yy": "充电器|LED照明|适配器", "fz": "SOP7" },
+            { "xh": "MT3611B", "gzms": "PSR", "nx": "6", "gl": "12W", "djgh": "75mW", "glg": "BJT", "xb": "是", "yy": "充电器|LED照明|适配器", "fz": "SOP7" }
+        ];
+
+        var data2 = [
+            { "xh": "MT5610", "ny": "40", "dtnz": "15mΩ", "gzdy": "5.5", "scgl": "5V,2A", "gzms": "DCM", "yy": "充电器", "fz": "适配器" },
+            { "xh": "MT5612", "ny": "40", "dtnz": "20mΩ", "gzdy": "5.5", "scgl": "2.4V,2A", "gzms": "DCM", "yy": "充电器", "fz": "适配器" }
+        ];
+
+        var data3 = [
+            { "xh": "MT3582", "nzjz": "YES", "gzdy": "5-8V", "scdl": "250mA", "gzms": "Linear", "yy": "万能充电器 座充", "fz": "DIP8" },
+            { "xh": "DAMT3582", "nzjz": "YES", "gzdy": "5-8V", "scdl": "250mA", "gzms": "Linear", "yy": "万能充电器 座充", "fz": "DIP8" },
+            { "xh": "DSMT3582", "nzjz": "YES", "gzdy": "5-8V", "scdl": "250mA", "gzms": "Linear", "yy": "万能充电器 座充", "fz": "DIP8" },
+            { "xh": "SMT3582", "nzjz": "YES", "gzdy": "5-8V", "scdl": "250mA", "gzms": "Linear", "yy": "万能充电器 座充", "fz": "DIP8" },
+            { "xh": "C1MT3588", "nzjz": "YES", "gzdy": "5-8V", "scdl": "250mA", "gzms": "Linear", "yy": "万能充电器 座充", "fz": "DIP8" },
+            { "xh": "AMT3588", "nzjz": "YES", "gzdy": "5-8V", "scdl": "250mA", "gzms": "Linear", "yy": "万能充电器 座充", "fz": "DIP8" },
+            { "xh": "DAMT6608", "nzjz": "YES", "gzdy": "5-8V", "scdl": "250mA", "gzms": "Linear", "yy": "万能充电器 座充", "fz": "DIP8" },
+            { "xh": "MT3586", "nzjz": "YES", "gzdy": "5-8V", "scdl": "250mA", "gzms": "Linear", "yy": "万能充电器 座充", "fz": "DIP8" },
+            { "xh": "MT3782", "nzjz": "YES", "gzdy": "5-8V", "scdl": "250mA", "gzms": "Linear", "yy": "万能充电器 座充", "fz": "DIP8" }
+        ];
+        var data4 = [
+            { "xh": "MT7522", "nzjz": "2.45V", "gzdy": "4.5-5.5V", "jzjd": "3%", "gzms": "PWM", "yy": "PC-ATX电源", "fz": "DIP16" }
+        ];
+        var data5 = [
+            { "xh": "MT2808", "fdms": "CV/LC", "cdms": "Linear", "cddl": "1A", "fddl": "1.2A", "djdl": "10uA", "fz": "ETTSOP-16" },
+            { "xh": "MT2818", "fdms": "CV/LC", "cdms": "Switch", "cddl": "1A", "fddl": "1.2A", "djdl": "10uA", "fz": "ETTSOP-24" }
+        ];
+        var data6 = [
+            { "xh": "MT277", "gzdy": "3.5-20V", "qddy": "250mA", "yy": "无刷直流马达", "gzwd": "-20-85℃", "dd": "TO94", "fz": "ETTSOP-16" },
+            { "xh": "MT276", "gzdy": "3.0-20V", "qddy": "300mA", "yy": "无刷直流马达", "gzwd": "-20-85℃", "dd": "TO94", "fz": "ETTSOP-24" }
+        ];
+
+        for (var i = 0; i < data1.length; i++) {
+            var d = data1[i];
+            var yy = d.yy.split('|');
+            var yyHtml = '';
+            for (var y in yy) {
+                yyHtml += '<div>' + yy[y] + '</div>';
+            }
+            var tr = '<tr>';
+            tr += '<td>' +
+                d.xh +
+                '</td><td>' +
+                d.gzms +
+                '</td><td>' +
+                d.nx +
+                '</td><td style="color:#ff5a00;">' +
+                d.gl +
+                '</td><td>' +
+                d.djgh +
+                '</td><td>' +
+                d.glg +
+                '</td><td style="color:#3289ff;">' +
+                d.xb +
+                '</td><td>' +
+                yyHtml +
+                '</td><td>' +
+                d.fz +
+                '</td>';
+            tr += '</tr>';
+            $('#table1').append(tr);
+        }
+        for (var i = 0; i < data2.length; i++) {
+            var d = data2[i];
+            var tr = '<tr>';
+            tr += '<td>' +
+                d.xh +
+                '</td><td>' +
+                d.ny +
+                '</td><td>' +
+                d.dtnz +
+                '</td><td>' +
+                d.gzdy +
+                '</td><td>' +
+                d.scgl +
+                '</td><td>' +
+                d.gzms +
+                '</td><td>' +
+                d.yy +
+                '</td><td>' +
+                d.fz +
+                '</td>';
+            tr += '</tr>';
+            $('#table2').append(tr);
+        }
+        for (var i = 0; i < data3.length; i++) {
+            var d = data3[i];
+            var tr = '<tr>';
+            tr += '<td>' +
+                d.xh +
+                '</td><td>' +
+                d.nzjz +
+                '</td><td>' +
+                d.gzdy +
+                '</td><td>' +
+                d.scdl +
+                '</td><td>' +
+                d.gzms +
+                '</td><td>' +
+                d.yy +
+                '</td><td>' +
+                d.fz +
+                '</td>';
+            tr += '</tr>';
+            $('#table3').append(tr);
+        }
+        for (var i = 0; i < data4.length; i++) {
+            var d = data4[i];
+            var tr = '<tr>';
+            tr += '<td>' +
+                d.xh +
+                '</td><td>' +
+                d.nzjz +
+                '</td><td>' +
+                d.gzdy +
+                '</td><td>' +
+                d.jzjd +
+                '</td><td>' +
+                d.gzms +
+                '</td><td>' +
+                d.yy +
+                '</td><td>' +
+                d.fz +
+                '</td>';
+            tr += '</tr>';
+            $('#table4').append(tr);
+        }
+        for (var i = 0; i < data5.length; i++) {
+            var d = data5[i];
+            var tr = '<tr>';
+            tr += '<td>' +
+                d.xh +
+                '</td><td>' +
+                d.fdms +
+                '</td><td>' +
+                d.cdms +
+                '</td><td>' +
+                d.cddl +
+                '</td><td>' +
+                d.fddl +
+                '</td><td>' +
+                d.djdl +
+                '</td><td>' +
+                d.fz +
+                '</td>';
+            tr += '</tr>';
+            $('#table5').append(tr);
+        }
+        for (var i = 0; i < data6.length; i++) {
+            var d = data6[i];
+            var tr = '<tr>';
+            tr += '<td>' +
+                d.xh +
+                '</td><td>' +
+                d.gzdy +
+                '</td><td>' +
+                d.qddy +
+                '</td><td>' +
+                d.yy +
+                '</td><td>' +
+                d.gzwd +
+                '</td><td>' +
+                d.dd +
+                '</td><td>' +
+                d.fz +
+                '</td>';
+            tr += '</tr>';
+            $('#table6').append(tr);
+        }
+
+        $('.main .ct .l1 .td').each(function (j, e) {
+            $(e).on('click', function () {
+                changeTab(this);
+            });
+        });
+    });
+
+    var curId = 1;
+    function changeTab(obj) {
+        var id = $(obj).attr('data-id');
+        if (id === curId) {
+            return;
+        }
+
+        $('.main .ct .l1 .td').each(function (j, e) {
+            var id1 = $(e).attr('data-id');
+            $('#table' + id1).hide();
+            $(e).removeClass('checked');
+
+            if (id1 === id) {
+                $(e).addClass('checked');
+                $('#table' + id).show();
+                return;
+            }
+        });
+
+    }
+</script>

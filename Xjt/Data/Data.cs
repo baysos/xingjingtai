@@ -23,8 +23,8 @@ namespace Xjt.Data
         private static string _joinUs;
         public static string JoinUs => _joinUs ?? (_joinUs = CommonHelper.GetJsonModel<string>("JoinUs"));
 
-        private static IndustryCase _industryCase;
-        public static IndustryCase IndustryCase => _industryCase ?? (_industryCase = CommonHelper.GetJsonModel<IndustryCase>("IndustryCase"));
+        private static List<IndustryCase> _industryCase;
+        public static List<IndustryCase> IndustryCase => _industryCase ?? (_industryCase = CommonHelper.GetJsonModel<List<IndustryCase>>("IndustryCase"));
 
         public static void RefreshDataByType(DataTypeEnum dt)
         {
@@ -46,7 +46,7 @@ namespace Xjt.Data
                     _joinUs = null;
                     break;
                 case DataTypeEnum.IndustryCase:
-                    _joinUs = null;
+                    _industryCase = null;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(dt), dt, null);

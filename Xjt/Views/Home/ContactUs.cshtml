@@ -1,0 +1,20 @@
+﻿@using Xjt.Data
+
+@{
+    ViewBag.Title = "联系我们";
+    ViewBag.Tag = 5;
+    var contactus = Data.ContactUs;
+    contactus = contactus ?? string.Empty;
+}
+
+@{ Html.RenderPartial("HeaderContent");}
+
+<style>
+    .main .ct { overflow: hidden; background-color: #e9e9e9; }
+    .main .ct .content { width: 1200px; min-height: 620px; margin: 22px auto 40px auto; overflow: hidden; word-wrap: break-word; word-break: break-all; padding: 60px 120px 40px 120px; background-color: #fff; }
+</style>
+<div class="ct">
+    <div class="content">
+        @Html.Raw(contactus)
+    </div>
+</div>
