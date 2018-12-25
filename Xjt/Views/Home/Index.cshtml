@@ -47,7 +47,7 @@
             @foreach (var product in productList)
             {
                 <li class="img">
-                    <a href=""><img src="@product.Img" title="@product.Name" alt="@product.Name" /></a>
+                    <a href="/productdetail?id=@product.Id"><img src="@product.Img" title="@product.Name" alt="@product.Name" /></a>
                 </li>
             }
         </ul>
