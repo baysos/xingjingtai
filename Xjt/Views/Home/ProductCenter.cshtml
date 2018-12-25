@@ -94,8 +94,8 @@
                 <th>驱动电源</th>
                 <th>应用</th>
                 <th>工作温度</th>
-                <th>待定</th>
                 <th>封装</th>
+                @*<th>封装</th>*@
             </tr>
         </table>
     </div>
@@ -274,9 +274,10 @@
                 d.gzwd +
                 '</td><td>' +
                 d.dd +
-                '</td><td>' +
-                d.fz +
                 '</td>';
+                //'<td>' +
+                //d.fz +
+                //'</td>';
             tr += '</tr>';
             $('#table6').append(tr);
         }
