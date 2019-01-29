@@ -5,7 +5,7 @@
     ViewBag.Tag = 3;
     var industryCase = Data.IndustryCase;
     industryCase = industryCase ?? new List<IndustryCase>();
-    industryCase = industryCase.OrderBy(a => a.Id).ToList();
+    industryCase = industryCase.OrderBy(a => a.Order).ToList();
     var i = 0;
 }
 

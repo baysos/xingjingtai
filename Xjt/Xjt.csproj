@@ -191,17 +191,29 @@
     <Content Include="Areas\Manager\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Manager\Views\Data\Index.cshtml" />
     <Content Include="Areas\Manager\Views\Data\Login.cshtml" />
-    <Content Include="Data\Product.config" />
-    <Content Include="Data\Banner.config" />
+    <Content Include="Data\Product.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Banner.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Areas\Manager\Views\Data\Product.cshtml" />
     <Content Include="Areas\Manager\Views\Data\AddProduct.cshtml" />
-    <Content Include="Data\Other.config" />
+    <Content Include="Data\Other.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Areas\Manager\Views\Data\Other.cshtml" />
     <Content Include="Areas\Manager\Views\Data\ContactUs.cshtml" />
     <Content Include="Areas\Manager\Views\Data\JoinUs.cshtml" />
-    <Content Include="Data\ContactUs.config" />
-    <Content Include="Data\JoinUs.config" />
-    <Content Include="Data\IndustryCase.config" />
+    <Content Include="Data\ContactUs.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\JoinUs.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\IndustryCase.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Areas\Manager\Views\Data\IndustryCase.cshtml" />
     <Content Include="Areas\Manager\Views\Data\AddIndustryCase.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />

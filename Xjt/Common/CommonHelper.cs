@@ -83,12 +83,10 @@ namespace Xjt.Common
                     return false;
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return false;
+                throw ex;
             }
-
-
         }
     }
 }

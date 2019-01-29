@@ -24,30 +24,37 @@ namespace Xjt.Areas.Manager.Controllers
         [HttpPost]
         public ActionResult LoginCheck(string name, string pass)
         {
-            var userList = CommonHelper.GetJsonModel<List<User>>("User");
-            if (userList != null && userList.Count > 0)
+            try
             {
-                var user = userList.Find(a => a.Name == name);
-                if (user == null)
+                var userList = CommonHelper.GetJsonModel<List<User>>("User");
+                if (userList != null && userList.Count > 0)
                 {
-                    return CommonHelper.ExceptionResult("用户名不存在");
+                    var user = userList.Find(a => a.Name == name);
+                    if (user == null)
+                    {
+                        return CommonHelper.ExceptionResult("用户名不存在");
+                    }
+
+                    var p = SecurityHelper.CreateMd5Str(pass + ConstValue.PassSalt);
+                    if (user.Pass != p)
+                    {
+                        return CommonHelper.ExceptionResult("用户名或密码错误");
+                    }
+
+                    user.LastLoginTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                    CommonHelper.SaveJsonModel(userList, "User");
+                    var sign = Guid.NewGuid().ToStringEx();
+                    CommonHelper.SignDic[name] = sign;
+
+                    return CommonHelper.Result(sign);
                 }
 
-                var p = SecurityHelper.CreateMd5Str(pass + ConstValue.PassSalt);
-                if (user.Pass != p)
-                {
-                    return CommonHelper.ExceptionResult("用户名或密码错误");
-                }
-
-                user.LastLoginTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                CommonHelper.SaveJsonModel(userList, "User");
-                var sign = Guid.NewGuid().ToStringEx();
-                CommonHelper.SignDic[name] = sign;
-
-                return CommonHelper.Result(sign);
+                return CommonHelper.ExceptionResult("用户名不存在");
             }
-
-            return CommonHelper.ExceptionResult("用户名不存在");
+            catch (Exception e)
+            {
+                return CommonHelper.ExceptionResult(e.Message);
+            }
         }
 
         [HttpPost]
@@ -257,7 +264,7 @@ namespace Xjt.Areas.Manager.Controllers
             }
             catch (Exception e)
             {
-                return CommonHelper.ExceptionResult("删除失败！e:" + e.Message + "||" + e.InnerException?.Message);
+                return CommonHelper.ExceptionResult("排序失败！e:" + e.Message + "||" + e.InnerException?.Message);
             }
             
         }
@@ -527,6 +534,85 @@ namespace Xjt.Areas.Manager.Controllers
             catch (Exception e)
             {
                 return CommonHelper.ExceptionResult("删除失败！e:" + e.Message + "||" + e.InnerException?.Message);
+            }
+
+        }
+
+        /// <summary>
+        /// 行业案例重排序
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [IdentityVerificationAjax]
+        public ActionResult OrderIndustryCase(int id, int type)
+        {
+            try
+            {
+                var list = CommonHelper.GetJsonModel<List<IndustryCase>>("IndustryCase");
+                var isInit = false;
+                list.ForEach(a =>
+                {
+                    if (a.Order == 0)
+                    {
+                        isInit = true;
+                        a.Order = a.Id;
+                    }
+                });
+                if (isInit)
+                {
+                    CommonHelper.SaveJsonModel(list, "IndustryCase");
+                    Data.Data.RefreshDataByType(DataTypeEnum.IndustryCase);
+                }
+
+                var isUpdate = false;
+                if (list != null && list.Count > 0)
+                {
+                    var model = list.Find(a => a.Id == id);
+                    if (model != null)
+                    {
+                        IndustryCase md = null;
+                        //上移
+                        if (type == 1)
+                        {
+                            var listTemp = list.FindAll(a => a.Order < model.Order).OrderByDescending(a => a.Order)
+                                .ToList();
+
+                            md = listTemp.Count > 0 ? listTemp[0] : null;
+                        }
+                        else //下移
+                        {
+                            var listTemp = list.FindAll(a => a.Order > model.Order).OrderBy(a => a.Order).ToList();
+
+                            md = listTemp.Count > 0 ? listTemp[0] : null;
+                        }
+
+                        if (md != null)
+                        {
+                            md.Order = md.Order + model.Order;
+                            model.Order = md.Order - model.Order;
+                            list.Find(a => a.Id == md.Id).Order = md.Order - model.Order;
+                            isUpdate = true;
+                        }
+
+                        CommonHelper.SaveJsonModel(list, "IndustryCase");
+                        Data.Data.RefreshDataByType(DataTypeEnum.IndustryCase);
+                    }
+                }
+
+                if (isUpdate)
+                {
+                    return CommonHelper.Result("操作成功");
+                }
+                else
+                {
+                    return CommonHelper.Result("未操作");
+                }
+            }
+            catch (Exception e)
+            {
+                return CommonHelper.ExceptionResult("排序失败！e:" + e.Message + "||" + e.InnerException?.Message);
             }
 
         }

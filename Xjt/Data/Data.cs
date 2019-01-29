@@ -139,6 +139,11 @@ namespace Xjt.Data
     {
         public int Id { get; set; }
 
+        /// <summary>
+        /// 排序
+        /// </summary>
+        public int Order { get; set; }
+
         public string Img { get; set; }
 
         public string Content { get; set; }

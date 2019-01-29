@@ -5,6 +5,11 @@
     productList = productList ?? new List<Product>();
     productList = productList.Take(7).OrderBy(a => a.Order).ToList();
     var productListJson = JsonConvert.SerializeObject(productList);
+    var industryCaseList = Data.IndustryCase.OrderBy(a => a.Order).ToList();
+    IndustryCase case1 = industryCaseList != null && industryCaseList.Count >= 1 ? industryCaseList[0] : new IndustryCase();
+    IndustryCase case2 = industryCaseList != null && industryCaseList.Count >= 2 ? industryCaseList[1] : new IndustryCase();
+    IndustryCase case3 = industryCaseList != null && industryCaseList.Count >= 3 ? industryCaseList[2] : new IndustryCase();
+    IndustryCase case4 = industryCaseList != null && industryCaseList.Count >= 4 ? industryCaseList[3] : new IndustryCase();
 
     ViewBag.Title = "首页";
     ViewBag.Tag = 1;
@@ -66,12 +71,12 @@
         </div>
         <a class="l2" href="">
             <div class="l">
-                <div><img src="~/Image/Default/figure05.png" /></div>
-                <div><img src="~/Image/Default/figure06.png" /></div>
-                <div><img src="~/Image/Default/figure07.png" /></div>
+                <div><img src="@case2.Img" style="width: 400px; height: 202px; border: 0; " /></div>
+                <div><img src="@case3.Img" style="width: 400px; height: 202px; border: 0; "  /></div>
+                <div><img src="@case4.Img" style="width: 400px; height: 202px; border: 0; "  /></div>
             </div>
             <div class="r">
-                <img src="~/Image/Default/figure08.png" />
+                <img src="@case1.Img" style="width: 1042px; height: 600px; border: 0; "  />
             </div>
         </a>
         <div class="l3 tt">
